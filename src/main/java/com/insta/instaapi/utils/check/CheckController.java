@@ -1,4 +1,4 @@
-package com.insta.instaapi.check;
+package com.insta.instaapi.utils.check;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

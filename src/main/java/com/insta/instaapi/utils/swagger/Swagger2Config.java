@@ -1,4 +1,4 @@
-package com.insta.instaapi.swagger;
+package com.insta.instaapi.utils.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
