@@ -25,8 +25,6 @@ public class Users extends BaseEntity {
     @Column
     private String phoneNumber;
     @Column
-    private String username;
-    @Column
     private String email;
     @Column
     private String name;
@@ -60,7 +58,6 @@ public class Users extends BaseEntity {
         return Users.builder()
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
-                .username(request.getUsername())
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
