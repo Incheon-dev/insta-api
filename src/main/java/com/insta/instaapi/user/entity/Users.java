@@ -3,23 +3,29 @@ package com.insta.instaapi.user.entity;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.utils.entity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "insta_users")
+@Table(name = "user")
 public class Users extends BaseEntity {
 
     @Column
     private String phoneNumber;
+    @Column
+    private String username;
     @Column
     private String email;
     @Column
@@ -33,13 +39,11 @@ public class Users extends BaseEntity {
     @Column
     private String sex;
 
-    @Builder
-    public Users(String phoneNumber, String email, String name, String nickname, String password, String introduction, String sex) {
-        validate(phoneNumber, email, name, password);
-        this.nickname = nickname;
-        this.introduction = introduction;
-        this.sex = sex;
-    }
+    @ManyToMany
+    @JoinTable(name = "user_authority",
+            joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
 
     private void validate(String phoneNumber, String email, String name, String password) {
         if (Objects.equals(phoneNumber, "") || Objects.equals(email, "") || Objects.equals(name, "") || Objects.equals(password, "")) {
@@ -52,28 +56,17 @@ public class Users extends BaseEntity {
         }
     }
 
-    public Users create(SignUpRequest request) {
+    public Users create(SignUpRequest request, Authority authority, PasswordEncoder passwordEncoder) {
         return Users.builder()
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
+                .username(request.getUsername())
                 .name(request.getName())
                 .nickname(request.getNickname())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .introduction(request.getIntroduction())
                 .sex(request.getSex())
+                .authorities(Collections.singleton(authority))
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", password='" + password + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", sex='" + sex + '\'' +
-                '}';
     }
 }

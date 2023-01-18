@@ -16,13 +16,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/api/v1/sign-up")
+    @PostMapping("/api/sign-up")
     public ResponseEntity<String> create(@RequestBody SignUpRequest request) {
         String response = "";
         try {
             response = userService.create(request);
         } catch (Exception e) {
-            log.error("Can not create user.");
+            log.error(e.getMessage());
+            response = e.getMessage();
         }
         return ResponseEntity.ok(response);
     }

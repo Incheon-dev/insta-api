@@ -59,7 +59,7 @@ public class UserControllerTest {
                 .sex(sex)
                 .build();
 
-        String url = "http://localhost:" + port + "/api/v1/sign-up";
+        String url = "http://localhost:" + port + "/api/sign-up";
 
         //when
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
