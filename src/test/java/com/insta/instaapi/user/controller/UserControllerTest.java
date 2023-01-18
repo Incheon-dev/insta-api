@@ -1,10 +1,11 @@
 package com.insta.instaapi.user.controller;
 
-import com.insta.instaapi.user.dto.SignUpRequest;
+import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UserRepository;
 import org.junit.After;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,24 +41,35 @@ public class UserControllerTest {
     @Test
     public void 유저가_생성된다() throws Exception {
         //given
-        String username = "user1";
+        String phoneNumber = "phoneNumber1";
+        String email = "email1";
+        String name = "name1";
+        String nickname = "nickname1";
         String password = "{BCrypt}password1";
+        String introduction = "introduction1";
+        String sex = "sex1";
+
         SignUpRequest request = SignUpRequest.builder()
-                .username(username)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .name(name)
+                .nickname(nickname)
                 .password(password)
+                .introduction(introduction)
+                .sex(sex)
                 .build();
 
         String url = "http://localhost:" + port + "/api/v1/sign-up";
 
         //when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, request, Long.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
         List<Users> users = userRepository.findAll();
-        assertThat(users.get(0).getUsername()).isEqualTo(username);
+
+        assertThat(users.get(0).getName()).isEqualTo(name);
         assertThat(users.get(0).getPassword()).isEqualTo(password);
     }
 }

@@ -1,7 +1,7 @@
 package com.insta.instaapi.user.service;
 
-import com.insta.instaapi.user.dto.SignUpRequest;
+import com.insta.instaapi.user.dto.request.SignUpRequest;
 
 public interface UserService {
-    Long signup(SignUpRequest request);
+    String create(SignUpRequest request);
 }

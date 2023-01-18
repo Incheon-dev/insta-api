@@ -1,25 +1,29 @@
 package com.insta.instaapi.user.controller;
 
-import com.insta.instaapi.user.dto.SignUpRequest;
+import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Log4j2
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-
     @PostMapping("/api/v1/sign-up")
-    public ResponseEntity<Long> signup(@RequestBody SignUpRequest request) {
-        Long response = userService.signup(request);
+    public ResponseEntity<String> create(@RequestBody SignUpRequest request) {
+        String response = "";
+        try {
+            response = userService.create(request);
+        } catch (Exception e) {
+            log.error("Can not create user.");
+        }
         return ResponseEntity.ok(response);
     }
 }

@@ -21,6 +21,13 @@ repositories {
     jcenter()
 }
 
+configurations {
+    all {
+        // protect logback crash
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
 dependencies {
     // spring-boot
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -48,4 +55,7 @@ dependencies {
 
     // flyway
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.0'
+
+    // log4j2
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 }
