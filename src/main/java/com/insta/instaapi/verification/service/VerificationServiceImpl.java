@@ -23,8 +23,10 @@ public class VerificationServiceImpl implements VerificationService {
     public void sendVerificationNumber(String email) {
         Random random = new Random();
         String authKey = String.valueOf(random.nextInt(888888) + 111111);
+        String subject = "인스타그램 인증번호입니다.";
+        String text = "인증번호는 " + authKey + "입니다. <br/>";
 
-        sendEmail(email, authKey);
+        sendEmail(email, authKey, subject, text);
     }
 
     @Override
@@ -32,11 +34,7 @@ public class VerificationServiceImpl implements VerificationService {
         return Objects.equals(request.getEmail(), redisUtil.getData(request.getAuthKey()));
     }
 
-    private void sendEmail(String email, String authKey) {
-
-        String subject = "인스타그램 인증번호입니다.";
-        String text = "인증번호는 " + authKey + "입니다. <br/>";
-
+    private void sendEmail(String email, String authKey, String subject, String text) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");

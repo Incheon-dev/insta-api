@@ -59,7 +59,7 @@ public class UserControllerTest {
                 .sex(sex)
                 .build();
 
-        String url = "http://localhost:" + port + "/api/sign-up";
+        String url = "http://localhost:" + port + "/api/account/sign-up";
 
         //when
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
@@ -71,5 +71,47 @@ public class UserControllerTest {
 
         assertThat(users.get(0).getName()).isEqualTo(name);
         assertThat(users.get(0).getPassword()).isEqualTo(password);
+    }
+
+    @Test
+    public void 이미_가입한_유저가_있다() throws Exception {
+        //given
+        String phoneNumber = "phoneNumber1";
+        String email = "email1";
+        String name = "name1";
+        String nickname = "nickname1";
+        String password = "{BCrypt}password1";
+        String introduction = "introduction1";
+        String sex = "sex1";
+
+        Users user = Users.builder()
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .name(name)
+                .nickname(nickname)
+                .password(password)
+                .introduction(introduction)
+                .sex(sex)
+                .build();
+
+        userRepository.save(user);
+
+        SignUpRequest request = SignUpRequest.builder()
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .name(name)
+                .nickname(nickname)
+                .password(password)
+                .introduction(introduction)
+                .sex(sex)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/account/sign-up";
+
+        //when
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
+
+        //then
+        assertThat(responseEntity.getBody()).isEqualTo("해당 번호로 가입된 유저가 존재합니다.");
     }
 }

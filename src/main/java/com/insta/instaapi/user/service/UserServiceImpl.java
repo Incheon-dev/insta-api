@@ -5,6 +5,7 @@ import com.insta.instaapi.user.entity.Authority;
 import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UserRepository;
+import com.insta.instaapi.user.exception.UserDuplicatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String create(SignUpRequest request) {
+
+        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new UserDuplicatedException("해당 번호로 가입된 유저가 존재합니다.");
+        }
 
         Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
