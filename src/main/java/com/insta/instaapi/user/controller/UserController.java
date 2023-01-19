@@ -5,9 +5,7 @@ import com.insta.instaapi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
@@ -16,9 +14,23 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/api/sign-up")
+    @GetMapping("/api/account")
+    public ResponseEntity<Boolean> validate(@RequestParam String email) {
+        Boolean response;
+
+        try {
+            response = userService.validate(email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response = null;
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/account/sign-up")
     public ResponseEntity<String> create(@RequestBody SignUpRequest request) {
         String response = "";
+
         try {
             response = userService.create(request);
         } catch (Exception e) {

@@ -25,7 +25,7 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/api/account/authenticate")
     public ResponseEntity<TokenDto> authorize(@RequestBody SignInRequest request) {
 
         UsernamePasswordAuthenticationToken authenticationToken =

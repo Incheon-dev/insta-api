@@ -10,7 +10,6 @@ public class SignUpRequest {
 
     private String phoneNumber;
     private String email;
-    private String username;
     private String name;
     private String nickname;
     private String password;
@@ -18,12 +17,11 @@ public class SignUpRequest {
     private String sex;
 
     @Builder
-    public SignUpRequest(String phoneNumber, String email, String username, String name, String nickname, String password, String introduction,
+    public SignUpRequest(String phoneNumber, String email, String name, String nickname, String password, String introduction,
                          String sex) {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.name = name;
-        this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.introduction = introduction;
