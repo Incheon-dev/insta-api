@@ -1,7 +1,6 @@
 package com.insta.instaapi.user.entity;
 
 import com.insta.instaapi.user.dto.request.SignUpRequest;
-import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.utils.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -36,6 +34,8 @@ public class Users extends BaseEntity {
     private String introduction;
     @Column
     private String sex;
+    @Column
+    private UserStatus status;
 
     @ManyToMany
     @JoinTable(name = "user_authority",
@@ -43,18 +43,7 @@ public class Users extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
-    private void validate(String phoneNumber, String email, String name, String password) {
-        if (Objects.equals(phoneNumber, "") || Objects.equals(email, "") || Objects.equals(name, "") || Objects.equals(password, "")) {
-            throw new UserException("공백이 존재합니다.");
-        } else {
-            this.phoneNumber = phoneNumber;
-            this.email = email;
-            this.name = name;
-            this.password = password;
-        }
-    }
-
-    public Users create(SignUpRequest request, Authority authority, PasswordEncoder passwordEncoder) {
+    public Users create(SignUpRequest request, Authority authority, PasswordEncoder passwordEncoder, UserStatus status) {
         return Users.builder()
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
@@ -64,6 +53,7 @@ public class Users extends BaseEntity {
                 .introduction(request.getIntroduction())
                 .sex(request.getSex())
                 .authorities(Collections.singleton(authority))
+                .status(status)
                 .build();
     }
 }

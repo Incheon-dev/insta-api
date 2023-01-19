@@ -2,6 +2,7 @@ package com.insta.instaapi.user.service;
 
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.entity.Authority;
+import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UserRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedEmailException;
@@ -27,6 +28,6 @@ public class UserServiceImpl implements UserService {
                 .authorityName("ROLE_USER")
                 .build();
 
-        return userRepository.save(new Users().create(request, authority, passwordEncoder)).getId();
+        return userRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getId();
     }
 }
