@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils;
+package com.insta.instaapi.utils.security.controller;
 
 import com.insta.instaapi.utils.security.dto.SignInRequest;
 import com.insta.instaapi.utils.security.dto.TokenDto;

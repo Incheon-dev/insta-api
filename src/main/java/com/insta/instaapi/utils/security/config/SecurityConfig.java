@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security;
+package com.insta.instaapi.utils.security.config;
 
 import com.insta.instaapi.utils.security.jwt.JwtAccessDeniedHandler;
 import com.insta.instaapi.utils.security.jwt.JwtAuthenticationEntryPoint;

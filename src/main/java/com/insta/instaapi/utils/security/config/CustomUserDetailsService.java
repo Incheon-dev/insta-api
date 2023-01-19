@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security;
+package com.insta.instaapi.utils.security.config;
 
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UserRepository;
