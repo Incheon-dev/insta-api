@@ -16,7 +16,7 @@ public class VerificationController {
 
     private final VerificationService emailService;
 
-    @PostMapping("/api/user")
+    @PostMapping("/api/account/verify")
     public ResponseEntity<Boolean> verify(@RequestBody VerificationRequest request) {
         Boolean response = null;
         try {
@@ -27,7 +27,7 @@ public class VerificationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/user")
+    @GetMapping("/api/account/verify")
     public ResponseEntity<Void> sendVerificationNumber(@RequestParam String email) {
         try {
             emailService.sendVerificationNumber(email);

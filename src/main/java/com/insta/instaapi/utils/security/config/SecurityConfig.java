@@ -51,8 +51,9 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/account/**", "/api/user/**").permitAll()
-                .requestMatchers(PathRequest.toH2Console()).permitAll()
+                .antMatchers("/api/account/**", "/api/account/**").permitAll()
+                .antMatchers("/api/user/**").hasRole("USER")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
                 .and()
