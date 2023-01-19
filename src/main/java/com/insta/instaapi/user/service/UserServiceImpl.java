@@ -8,8 +8,10 @@ import com.insta.instaapi.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getId();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Boolean validate(String email) {
         return userRepository.existsByEmail(email);
