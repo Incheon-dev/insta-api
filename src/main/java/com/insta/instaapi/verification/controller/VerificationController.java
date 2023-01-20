@@ -1,5 +1,6 @@
 package com.insta.instaapi.verification.controller;
 
+import com.insta.instaapi.user.dto.request.FindRequest;
 import com.insta.instaapi.verification.dto.request.VerificationRequest;
 import com.insta.instaapi.verification.service.VerificationService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,16 @@ public class VerificationController {
     public ResponseEntity<Void> sendVerificationNumber(@RequestParam String email) {
         try {
             emailService.sendVerificationNumber(email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/account/find")
+    public ResponseEntity<Void> findEmail(@RequestBody FindRequest request) {
+        try {
+            emailService.findEmail(request);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

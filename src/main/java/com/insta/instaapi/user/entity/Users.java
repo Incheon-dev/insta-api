@@ -1,6 +1,7 @@
 package com.insta.instaapi.user.entity;
 
 import com.insta.instaapi.user.dto.request.SignUpRequest;
+import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.utils.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,5 +56,9 @@ public class Users extends BaseEntity {
                 .authorities(Collections.singleton(authority))
                 .status(status)
                 .build();
+    }
+
+    public void reset(String newPassword) {
+        this.password = newPassword;
     }
 }
