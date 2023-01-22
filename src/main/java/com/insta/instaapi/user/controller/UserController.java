@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Log4j2
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/account/sign-up")
-    public ResponseEntity<String> create(@RequestBody SignUpRequest request) {
+    public ResponseEntity<String> create(@Valid @RequestBody SignUpRequest request) {
         String response = "";
 
         try {
@@ -42,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/api/account")
-    public ResponseEntity<String> reset(@RequestBody UpdatePasswordRequest request) {
+    public ResponseEntity<String> reset(@Valid @RequestBody UpdatePasswordRequest request) {
         String response = "";
 
         try {
