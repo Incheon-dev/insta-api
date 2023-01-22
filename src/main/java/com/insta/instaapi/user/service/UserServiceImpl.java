@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
         user.reset(passwordEncoder.encode(request.getNewPassword()));
 
-        return "변경되었습니다.";
+        return user.getId();
     }
 
     public void findByEmailAndPhoneNumberAndName(String email, String phoneNumber, String name) {
