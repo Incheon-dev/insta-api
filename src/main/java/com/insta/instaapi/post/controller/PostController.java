@@ -10,5 +10,4 @@ public class PostController {
 
     private final PostService postService;
 
-
 }

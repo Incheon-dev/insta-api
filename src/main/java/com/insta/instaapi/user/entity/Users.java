@@ -1,7 +1,7 @@
 package com.insta.instaapi.user.entity;
 
+import com.insta.instaapi.post.entity.Posts;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
-import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.utils.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,20 +23,30 @@ public class Users extends BaseEntity {
 
     @Column
     private String phoneNumber;
+
     @Column
     private String email;
+
     @Column
     private String name;
+
     @Column
     private String nickname;
+
     @Column
     private String password;
+
     @Column
     private String introduction;
+
     @Column
     private String sex;
+
     @Column
     private UserStatus status;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Posts> posts;
 
     @ManyToMany
     @JoinTable(name = "user_authority",
