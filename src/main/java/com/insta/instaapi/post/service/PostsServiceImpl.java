@@ -3,7 +3,6 @@ package com.insta.instaapi.post.service;
 import com.insta.instaapi.post.dto.request.PostRequest;
 import com.insta.instaapi.post.entity.Posts;
 import com.insta.instaapi.post.entity.repository.PostsRepository;
-import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,13 @@ public class PostsServiceImpl implements PostsService {
     private final PostsRepository postsRepository;
 
     @Override
-    public String post(HttpServletRequest servletRequest, PostRequest request) {
-        return postsRepository.save(new Posts().create(request, userService.current(servletRequest))).getId();
+    public String post(HttpServletRequest servletRequest, PostRequest requests) {
+        String postId = "";
+
+        for (String photo: requests.getPhotos()) {
+            postId = postsRepository.save(new Posts().create(requests, userService.current(servletRequest), photo)).getId();
+        }
+
+        return postId;
     }
 }

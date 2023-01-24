@@ -19,11 +19,11 @@ public class PostController {
     private final PostsService postsService;
 
     @PostMapping("/api/user/post")
-    public ResponseEntity<String> post(HttpServletRequest servletRequest, @RequestBody PostRequest request) {
+    public ResponseEntity<String> post(HttpServletRequest servletRequest, @RequestBody PostRequest requests) {
         String response = "";
 
         try {
-            response = postsService.post(servletRequest, request);
+            response = postsService.post(servletRequest, requests);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

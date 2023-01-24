@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class PostRequest {
 
-    private String photos;
+    private List<String> photos;
     private String postContent;
     private String location;
     private Boolean isHide;
@@ -17,7 +19,7 @@ public class PostRequest {
     private PostsStatus postsStatus;
 
     @Builder
-    public PostRequest(String photos, String postContent, String location, Boolean isHide, Boolean isComment, PostsStatus postsStatus) {
+    public PostRequest(List<String> photos, String postContent, String location, Boolean isHide, Boolean isComment, PostsStatus postsStatus) {
         this.photos = photos;
         this.postContent = postContent;
         this.location = location;
