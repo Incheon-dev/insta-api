@@ -1,7 +1,9 @@
 package com.insta.instaapi.utils.security.config;
 
+import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UserRepository;
+import com.insta.instaapi.user.exception.UserException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -30,12 +32,16 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(email + "을 찾을 수 없습니다."));
     }
 
-    private User createUser(String username, Users user) {
+    private User createUser(String email, Users user) {
+
+        if (user.getStatus() == UserStatus.INACTIVATED) {
+            throw new UserException("차단된 기록이 존재합니다.");
+        }
 
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
 
-        return new User(username, user.getPassword(), grantedAuthorities);
+        return new User(email, user.getPassword(), grantedAuthorities);
     }
 }

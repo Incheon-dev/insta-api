@@ -1,5 +1,6 @@
 package com.insta.instaapi.post.entity;
 
+import com.insta.instaapi.post.dto.request.PostRequest;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.utils.entity.BaseEntity;
 import lombok.Builder;
@@ -30,6 +31,7 @@ public class Posts extends BaseEntity {
     @Column
     private Boolean isComment;
 
+    @Enumerated(value = EnumType.STRING)
     @Column
     private PostsStatus postsStatus;
 
@@ -41,5 +43,16 @@ public class Posts extends BaseEntity {
         this.isHide = isHide;
         this.isComment = isComment;
         this.postsStatus = postsStatus;
+    }
+
+    public Posts create(PostRequest request, Users users) {
+        return Posts.builder()
+                .users(users)
+                .postsContent(request.getPostContent())
+                .location(request.getLocation())
+                .isHide(request.getIsHide())
+                .isComment(request.getIsComment())
+                .postsStatus(request.getPostsStatus())
+                .build();
     }
 }

@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -42,11 +44,12 @@ public class Users extends BaseEntity {
     @Column
     private String sex;
 
+    @Enumerated(value = EnumType.STRING)
     @Column
     private UserStatus status;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Posts> posts;
+    @OneToMany(mappedBy = "users")
+    private List<Posts> posts = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "user_authority",

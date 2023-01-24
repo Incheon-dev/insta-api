@@ -8,16 +8,20 @@ import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UserRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedException;
 import com.insta.instaapi.user.exception.UserNotFoundException;
+import com.insta.instaapi.utils.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -49,6 +53,16 @@ public class UserServiceImpl implements UserService {
         user.reset(passwordEncoder.encode(request.getNewPassword()));
 
         return user.getId();
+    }
+
+    public Users current(HttpServletRequest servletRequest) {
+        String info = jwtService.token(servletRequest).getSubject();
+        return findByEmail(info);
+    }
+
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
     }
 
     public void findByEmailAndPhoneNumberAndName(String email, String phoneNumber, String name) {

@@ -1,0 +1,26 @@
+package com.insta.instaapi.post.service;
+
+import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.entity.Posts;
+import com.insta.instaapi.post.entity.repository.PostsRepository;
+import com.insta.instaapi.user.entity.Users;
+import com.insta.instaapi.user.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class PostsServiceImpl implements PostsService {
+
+    private final UserServiceImpl userService;
+    private final PostsRepository postsRepository;
+
+    @Override
+    public String post(HttpServletRequest servletRequest, PostRequest request) {
+        return postsRepository.save(new Posts().create(request, userService.current(servletRequest))).getId();
+    }
+}
