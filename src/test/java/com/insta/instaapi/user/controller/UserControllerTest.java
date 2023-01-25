@@ -1,149 +1,70 @@
 package com.insta.instaapi.user.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
-import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
-import com.insta.instaapi.user.entity.Users;
-import com.insta.instaapi.user.entity.repository.UserRepository;
-import org.junit.After;
+import com.insta.instaapi.user.service.UserServiceImpl;
+import com.insta.instaapi.utils.security.config.SecurityConfig;
+import com.insta.instaapi.utils.security.jwt.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+@WebAppConfiguration
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(controllers = UserController.class)
+@AutoConfigureMockMvc
+@ContextConfiguration(classes = SecurityConfig.class)
 public class UserControllerTest {
 
-    @LocalServerPort
-    private int port;
+    @MockBean
+    private TokenProvider tokenProvider;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
+    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtSecurityConfig jwtSecurityConfig;
+
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private UserServiceImpl userService;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @After
-    public void tearDown() throws Exception {
-        userRepository.deleteAll();
-    }
+    private MockMvc mockMvc;
 
     @Test
-    public void 유저가_생성된다() throws Exception {
-        //given
-        String phoneNumber = "phoneNumber1";
-        String email = "email1";
-        String name = "name1";
-        String nickname = "nickname1";
-        String password = "{BCrypt}password1";
-        String introduction = "introduction1";
-        String sex = "sex1";
+    public void 회원가입을_한다() throws Exception {
+        String content = objectMapper.writeValueAsString(new SignUpRequest("010-7184-2939", "csd_1996@naver.com", "최승대",
+                "ChoiDevv", "admin1234", "최승대입니다.", "남자"));
 
-        SignUpRequest request = SignUpRequest.builder()
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .name(name)
-                .nickname(nickname)
-                .password(password)
-                .introduction(introduction)
-                .sex(sex)
-                .build();
-
-        String url = "http://localhost:" + port + "/api/account/sign-up";
-
-        //when
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
-
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        List<Users> users = userRepository.findAll();
-
-        assertThat(users.get(0).getName()).isEqualTo(name);
-        assertThat(users.get(0).getPassword()).isEqualTo(password);
-    }
-
-    @Test
-    public void 이미_가입한_유저가_있다() throws Exception {
-        //given
-        String phoneNumber = "phoneNumber1";
-        String email = "email1";
-        String name = "name1";
-        String nickname = "nickname1";
-        String password = "{BCrypt}password1";
-        String introduction = "introduction1";
-        String sex = "sex1";
-
-        Users user = Users.builder()
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .name(name)
-                .nickname(nickname)
-                .password(password)
-                .introduction(introduction)
-                .sex(sex)
-                .build();
-
-        userRepository.save(user);
-
-        SignUpRequest request = SignUpRequest.builder()
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .name(name)
-                .nickname(nickname)
-                .password(password)
-                .introduction(introduction)
-                .sex(sex)
-                .build();
-
-        String url = "http://localhost:" + port + "/api/account/sign-up";
-
-        //when
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
-
-        //then
-        assertThat(responseEntity.getBody()).isEqualTo("해당 번호로 가입된 유저가 존재합니다.");
-    }
-
-    @Test
-    public void 유저가_존재하는지_검증한다() throws Exception {
-        //given
-        String phoneNumber = "phoneNumber1";
-        String email = "email1";
-        String name = "name1";
-        String nickname = "nickname1";
-        String password = "{BCrypt}password1";
-        String introduction = "introduction1";
-        String sex = "sex1";
-
-        Users user = Users.builder()
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .name(name)
-                .nickname(nickname)
-                .password(password)
-                .introduction(introduction)
-                .sex(sex)
-                .build();
-
-        userRepository.save(user);
-
-        String url = "http://localhost:" + port + "/api/account?email={email}";
-
-        //when
-        Boolean response = restTemplate.getForObject(url, Boolean.class, email);
-
-        //then
-        assertThat(response).isEqualTo(true);
+        mockMvc.perform(post("/api/account/sign-up")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }

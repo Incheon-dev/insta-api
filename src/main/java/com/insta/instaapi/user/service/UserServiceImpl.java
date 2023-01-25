@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
                 .authorityName("ROLE_USER")
                 .build();
 
-        return userRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getId();
+        return userRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getName();
     }
 
     @Transactional(readOnly = true)

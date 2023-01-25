@@ -4,7 +4,6 @@ import com.insta.instaapi.utils.security.jwt.JwtAccessDeniedHandler;
 import com.insta.instaapi.utils.security.jwt.JwtAuthenticationEntryPoint;
 import com.insta.instaapi.utils.security.jwt.JwtSecurityConfig;
 import com.insta.instaapi.utils.security.jwt.TokenProvider;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
