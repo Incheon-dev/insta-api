@@ -2,6 +2,7 @@ package com.insta.instaapi.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
+import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import com.insta.instaapi.utils.security.config.SecurityConfig;
 import com.insta.instaapi.utils.security.jwt.*;
@@ -18,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,6 +63,18 @@ public class UserControllerTest {
                 "ChoiDevv", "admin1234", "최승대입니다.", "남자"));
 
         mockMvc.perform(post("/api/account/sign-up")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    public void 비밀번호를_변경한다() throws Exception {
+        String content = objectMapper.writeValueAsString(new UpdatePasswordRequest("csd_1996@naver.com", "new_admin1234"));
+
+        mockMvc.perform(put("/api/account")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
