@@ -5,6 +5,7 @@ import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import com.insta.instaapi.utils.security.config.SecurityConfig;
+import com.insta.instaapi.utils.security.dto.SignInRequest;
 import com.insta.instaapi.utils.security.jwt.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,6 +75,30 @@ public class UserControllerTest {
         String content = objectMapper.writeValueAsString(new UpdatePasswordRequest("csd_1996@naver.com", "new_admin1234"));
 
         mockMvc.perform(put("/api/account")
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    public void 이메일을_검증한다() throws Exception {
+        String email = "csd_1996@naver.com";
+
+        mockMvc.perform(get("/api/account")
+                .param("email", email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    public void 로그인을_한다() throws Exception {
+        String content = objectMapper.writeValueAsString(new SignInRequest("csd_1996@naver.com", "admin1234"));
+
+        mockMvc.perform(post("/api/account/authenticate")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
