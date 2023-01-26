@@ -2,12 +2,14 @@ package com.insta.instaapi.user.controller;
 
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
+import com.insta.instaapi.user.dto.response.UserResponse;
 import com.insta.instaapi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Log4j2
@@ -52,6 +54,18 @@ public class UserController {
         } catch (Exception e) {
             log.error(e.getMessage());
             response = e.getMessage();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/user/search")
+    public @ResponseBody ResponseEntity<UserResponse> search(HttpServletRequest httpServletRequest, @RequestParam String email) {
+        UserResponse response = null;
+
+        try {
+            response = userService.search(httpServletRequest, email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }

@@ -8,5 +8,5 @@ public interface VerificationService {
 
     Boolean verify(VerificationRequest request);
 
-    void findEmail(FindRequest request);
+    void existEmail(FindRequest request);
 }

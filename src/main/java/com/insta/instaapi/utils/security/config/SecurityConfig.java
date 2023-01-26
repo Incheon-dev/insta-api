@@ -63,13 +63,4 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsInfo(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("admin")
-                .password(passwordEncoder.encode("1234"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
 }

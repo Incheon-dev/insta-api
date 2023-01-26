@@ -36,6 +36,9 @@ public class Users extends BaseEntity {
     private String nickname;
 
     @Column
+    private String profileImage;
+
+    @Column
     private String password;
 
     @Column
@@ -68,6 +71,7 @@ public class Users extends BaseEntity {
                 .email(request.getEmail())
                 .name(request.getName())
                 .nickname(request.getNickname())
+                .profileImage(request.getProfileImage())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .introduction(request.getIntroduction())
                 .sex(request.getSex())
