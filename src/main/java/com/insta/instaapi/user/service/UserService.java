@@ -14,4 +14,6 @@ public interface UserService {
     String reset(UpdatePasswordRequest request);
 
     UserResponse search(HttpServletRequest httpServletRequest, String email);
+
+    String block(HttpServletRequest httpServletRequest, String email);
 }

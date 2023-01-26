@@ -59,13 +59,26 @@ public class UserController {
     }
 
     @GetMapping("/api/user/search")
-    public @ResponseBody ResponseEntity<UserResponse> search(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<UserResponse> search(HttpServletRequest httpServletRequest, @RequestParam String email) {
         UserResponse response = null;
 
         try {
             response = userService.search(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/user/block")
+    public ResponseEntity<String> block(HttpServletRequest httpServletRequest, @RequestParam String email) {
+        String response = "";
+
+        try {
+            response = userService.block(httpServletRequest, email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response = e.getMessage();
         }
         return ResponseEntity.ok(response);
     }

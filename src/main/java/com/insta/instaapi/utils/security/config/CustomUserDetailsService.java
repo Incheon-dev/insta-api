@@ -2,7 +2,7 @@ package com.insta.instaapi.utils.security.config;
 
 import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
-import com.insta.instaapi.user.entity.repository.UserRepository;
+import com.insta.instaapi.user.entity.repository.UsersRepository;
 import com.insta.instaapi.user.exception.UserException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String email) {
-        return userRepository.findOneWithAuthoritiesByEmail(email)
+        return usersRepository.findOneWithAuthoritiesByEmail(email)
                 .map(user -> createUser(email, user))
                 .orElseThrow(() -> new UsernameNotFoundException(email + "을 찾을 수 없습니다."));
     }

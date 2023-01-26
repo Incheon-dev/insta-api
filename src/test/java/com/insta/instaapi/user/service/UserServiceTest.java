@@ -2,7 +2,7 @@ package com.insta.instaapi.user.service;
 
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.entity.Users;
-import com.insta.instaapi.user.entity.repository.UserRepository;
+import com.insta.instaapi.user.entity.repository.UsersRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class UserServiceTest {
     private TestRestTemplate testRestTemplate;
 
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     @Transactional
     @Test
@@ -57,7 +57,7 @@ public class UserServiceTest {
         ResponseEntity<String> responseEntity = testRestTemplate.postForEntity(url, request, String.class);
 
         //then
-        Users user = userRepository.findByEmail(email).orElse(null);
+        Users user = usersRepository.findByEmail(email).orElse(null);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(user.getEmail()).isEqualTo(email);
         assertThat(user.getName()).isEqualTo(name);

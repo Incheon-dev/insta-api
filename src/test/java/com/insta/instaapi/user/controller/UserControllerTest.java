@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.user.dto.response.UserResponse;
-import com.insta.instaapi.user.entity.Users;
-import com.insta.instaapi.user.entity.repository.UserRepository;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import com.insta.instaapi.utils.security.config.SecurityConfig;
 import com.insta.instaapi.utils.security.dto.SignInRequest;

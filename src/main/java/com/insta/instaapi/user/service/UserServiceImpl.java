@@ -6,8 +6,11 @@ import com.insta.instaapi.user.dto.response.UserResponse;
 import com.insta.instaapi.user.entity.Authority;
 import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
-import com.insta.instaapi.user.entity.repository.UserRepository;
+import com.insta.instaapi.user.entity.UsersBlock;
+import com.insta.instaapi.user.entity.repository.UsersBlockRepository;
+import com.insta.instaapi.user.entity.repository.UsersRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedException;
+import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.user.exception.UserNotFoundException;
 import com.insta.instaapi.utils.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
+
+    private final UsersBlockRepository usersBlockRepository;
 
     @Override
     public String create(SignUpRequest request) {
 
-        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+        if (usersRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new UserDuplicatedException("해당 번호로 가입된 유저가 존재합니다.");
         }
 
@@ -37,13 +42,13 @@ public class UserServiceImpl implements UserService {
                 .authorityName("ROLE_USER")
                 .build();
 
-        return userRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getName();
+        return usersRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getName();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Boolean validate(String email) {
-        return userRepository.existsByEmail(email);
+        return usersRepository.existsByEmail(email);
     }
 
     @Override
@@ -56,8 +61,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse search(HttpServletRequest servletRequest, String email) {
+        existsByUserIdAndOtherUserId(current(servletRequest), findByEmail(email).getId());
+
         Users user = findByEmail(email);
         return UserResponse.of(user);
+    }
+
+    @Override
+    public String block(HttpServletRequest httpServletRequest, String email) {
+        return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email).getId())).getId();
     }
 
     public Users current(HttpServletRequest servletRequest) {
@@ -65,14 +77,20 @@ public class UserServiceImpl implements UserService {
         return findByEmail(info);
     }
 
-    public Users findByEmail(String email) {
-        return userRepository.findByEmail(email)
+    private Users findByEmail(String email) {
+        return usersRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
     }
 
     public void existsByEmailAndPhoneNumberAndName(String email, String phoneNumber, String name) {
-        if (!userRepository.existsByEmailAndPhoneNumberAndName(email, phoneNumber, name)) {
+        if (!usersRepository.existsByEmailAndPhoneNumberAndName(email, phoneNumber, name)) {
             throw new UserNotFoundException("해당 유저를 찾을 수 없습니다.");
+        }
+    }
+
+    private void existsByUserIdAndOtherUserId(Users users, String otherUserId) {
+        if (usersBlockRepository.existsByUsersAndOtherUserId(users, otherUserId)) {
+            throw new UserException("차단된 유저입니다.");
         }
     }
 }
