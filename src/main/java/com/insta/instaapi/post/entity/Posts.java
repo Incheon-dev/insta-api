@@ -49,14 +49,14 @@ public class Posts extends BaseEntity {
         this.photo = photo;
     }
 
-    public Posts create(PostRequest request, Users users, String photo) {
+    public Posts create(PostRequest request, Users users, String photo, PostsStatus postsStatus) {
         return Posts.builder()
                 .users(users)
                 .postsContent(request.getPostContent())
                 .location(request.getLocation())
                 .isHide(request.getIsHide())
                 .isComment(request.getIsComment())
-                .postsStatus(request.getPostsStatus())
+                .postsStatus(postsStatus)
                 .photo(photo)
                 .build();
     }

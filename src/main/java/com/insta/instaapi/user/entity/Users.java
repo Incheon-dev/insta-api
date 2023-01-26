@@ -57,6 +57,11 @@ public class Users extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
+    public Users(String email, String name) {
+        this.email = email;
+        this.name = name;
+    }
+
     public Users create(SignUpRequest request, Authority authority, PasswordEncoder passwordEncoder, UserStatus status) {
         return Users.builder()
                 .phoneNumber(request.getPhoneNumber())

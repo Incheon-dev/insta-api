@@ -16,15 +16,13 @@ public class PostRequest {
     private String location;
     private Boolean isHide;
     private Boolean isComment;
-    private PostsStatus postsStatus;
 
     @Builder
-    public PostRequest(List<String> photos, String postContent, String location, Boolean isHide, Boolean isComment, PostsStatus postsStatus) {
+    public PostRequest(List<String> photos, String postContent, String location, Boolean isHide, Boolean isComment) {
         this.photos = photos;
         this.postContent = postContent;
         this.location = location;
         this.isHide = isHide;
         this.isComment = isComment;
-        this.postsStatus = postsStatus;
     }
 }

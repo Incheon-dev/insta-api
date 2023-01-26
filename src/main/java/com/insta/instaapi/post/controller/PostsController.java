@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-public class PostController {
+public class PostsController {
 
     private final PostsService postsService;
 

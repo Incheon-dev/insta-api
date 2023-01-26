@@ -2,6 +2,7 @@ package com.insta.instaapi.post.service;
 
 import com.insta.instaapi.post.dto.request.PostRequest;
 import com.insta.instaapi.post.entity.Posts;
+import com.insta.instaapi.post.entity.PostsStatus;
 import com.insta.instaapi.post.entity.repository.PostsRepository;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class PostsServiceImpl implements PostsService {
         String postId = "";
 
         for (String photo: requests.getPhotos()) {
-            postId = postsRepository.save(new Posts().create(requests, userService.current(servletRequest), photo)).getId();
+            postId = postsRepository.save(new Posts().create(requests, userService.current(servletRequest), photo, PostsStatus.NOT_DELETED)).getId();
         }
 
         return postId;
