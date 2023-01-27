@@ -5,6 +5,7 @@ import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.user.dto.response.UserResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface UserService {
     String create(SignUpRequest request);
@@ -16,4 +17,6 @@ public interface UserService {
     UserResponse search(HttpServletRequest httpServletRequest, String email);
 
     String block(HttpServletRequest httpServletRequest, String email);
+
+    List<UserResponse> blockList(HttpServletRequest httpServletRequest);
 }

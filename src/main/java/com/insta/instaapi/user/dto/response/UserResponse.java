@@ -1,6 +1,7 @@
 package com.insta.instaapi.user.dto.response;
 
 import com.insta.instaapi.user.entity.Users;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class UserResponse {
     private String introduction;
     private String sex;
 
+    @QueryProjection
     @Builder
     public UserResponse(String id, String email, String name, String nickname, String introduction, String sex) {
         this.id = id;

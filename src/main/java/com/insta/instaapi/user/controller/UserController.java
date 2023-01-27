@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -79,6 +80,18 @@ public class UserController {
         } catch (Exception e) {
             log.error(e.getMessage());
             response = e.getMessage();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/user/block/list")
+    public ResponseEntity<List<UserResponse>> blockList(HttpServletRequest httpServletRequest) {
+        List<UserResponse> response = null;
+
+        try {
+            response = userService.blockList(httpServletRequest);
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }

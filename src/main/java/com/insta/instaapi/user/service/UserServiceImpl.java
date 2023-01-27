@@ -9,6 +9,7 @@ import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.UsersBlock;
 import com.insta.instaapi.user.entity.repository.UsersBlockRepository;
 import com.insta.instaapi.user.entity.repository.UsersRepository;
+import com.insta.instaapi.user.entity.repository.queryDSL.DslUsersBlockRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedException;
 import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.user.exception.UserNotFoundException;
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,8 +32,8 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
-
     private final UsersBlockRepository usersBlockRepository;
+    private final DslUsersBlockRepository dslUsersBlockRepository;
 
     @Override
     public String create(SignUpRequest request) {
@@ -68,8 +72,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponse> blockList(HttpServletRequest httpServletRequest) {
+        List<UsersBlock> blockList = usersBlockRepository.findAllByUsers(current(httpServletRequest));
+        List<String> otherUserList = blockList.stream().map(block -> block.getOtherUserId()).collect(Collectors.toList());
+        return findByUserId(otherUserList);
+    }
+
+    @Override
     public String block(HttpServletRequest httpServletRequest, String email) {
         return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email).getId())).getId();
+    }
+
+    private List<UserResponse> findByUserId(List<String> otherUserList) {
+        List<UserResponse> result = new ArrayList<>();
+        for (String userId: otherUserList) {
+            Users user = usersRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
+
+            result.add(UserResponse.of(user));
+        }
+        return result;
     }
 
     public Users current(HttpServletRequest servletRequest) {
