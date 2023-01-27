@@ -96,7 +96,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/api/user/unblock")
+    @DeleteMapping("/api/user/unblock")
     public ResponseEntity<Void> unblock(HttpServletRequest httpServletRequest, @RequestParam String email) {
         try {
             userService.unblock(httpServletRequest, email);
