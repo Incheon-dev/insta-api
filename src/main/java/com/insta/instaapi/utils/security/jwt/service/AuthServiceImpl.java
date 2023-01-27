@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService{
         redisUtil.setDataExpire(request.getEmail(), refreshToken, refreshTokenValidityInMilliseconds);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer" + accessToken);
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 
         return new ResponseEntity<>(new TokenResponse(accessToken, refreshToken), httpHeaders, HttpStatus.OK);
     }
