@@ -13,7 +13,7 @@ import com.insta.instaapi.user.entity.repository.queryDSL.DslUsersBlockRepositor
 import com.insta.instaapi.user.exception.UserDuplicatedException;
 import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.user.exception.UserNotFoundException;
-import com.insta.instaapi.utils.security.jwt.JwtService;
+import com.insta.instaapi.utils.security.jwt.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

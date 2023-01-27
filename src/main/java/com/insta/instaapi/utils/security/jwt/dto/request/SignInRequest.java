@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.dto;
+package com.insta.instaapi.utils.security.jwt.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
