@@ -21,4 +21,6 @@ public interface UserService {
     List<UserResponse> blockList(HttpServletRequest httpServletRequest);
 
     void unblock(HttpServletRequest httpServletRequest, String email);
+
+    String follow(HttpServletRequest httpServletRequest, String email);
 }

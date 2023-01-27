@@ -60,6 +60,9 @@ public class Users extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
+    @OneToMany(mappedBy = "users")
+    private List<Users> follow = new ArrayList<>();
+
     public Users(String email, String name) {
         this.email = email;
         this.name = name;

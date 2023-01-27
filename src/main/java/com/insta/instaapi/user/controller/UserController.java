@@ -105,4 +105,17 @@ public class UserController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/api/user/follow")
+    public ResponseEntity<String> follow(HttpServletRequest httpServletRequest, @RequestParam String email) {
+        String response = "";
+
+        try {
+            response = userService.follow(httpServletRequest, email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response = e.getMessage();
+        }
+        return ResponseEntity.ok(response);
+    }
 }

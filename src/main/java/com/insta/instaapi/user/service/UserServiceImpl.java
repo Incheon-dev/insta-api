@@ -84,6 +84,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String follow(HttpServletRequest httpServletRequest, String email) {
+        isFollowedUser(current(httpServletRequest), findByEmail(email).getId());
+        return null;
+    }
+
+    @Override
     public String block(HttpServletRequest httpServletRequest, String email) {
         return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email).getId())).getId();
     }
@@ -119,5 +125,9 @@ public class UserServiceImpl implements UserService {
         if (usersBlockRepository.existsByUsersAndOtherUserId(users, otherUserId)) {
             throw new UserException("차단된 유저입니다.");
         }
+    }
+
+    private String isFollowedUser(Users users, String otherUserId) {
+
     }
 }
