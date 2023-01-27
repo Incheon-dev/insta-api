@@ -9,4 +9,5 @@ import java.util.List;
 public interface UsersBlockRepository extends JpaRepository<UsersBlock, String> {
     boolean existsByUsersAndOtherUserId(Users users, String otherUserId);
     List<UsersBlock> findAllByUsers(Users users);
+    void deleteByUsersAndOtherUserId(Users users, String otherUserId);
 }

@@ -95,4 +95,14 @@ public class UserController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/api/user/unblock")
+    public ResponseEntity<Void> unblock(HttpServletRequest httpServletRequest, @RequestParam String email) {
+        try {
+            userService.unblock(httpServletRequest, email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
 }

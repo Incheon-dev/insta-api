@@ -79,6 +79,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void unblock(HttpServletRequest httpServletRequest, String email) {
+        usersBlockRepository.deleteByUsersAndOtherUserId(current(httpServletRequest), findByEmail(email).getId());
+    }
+
+    @Override
     public String block(HttpServletRequest httpServletRequest, String email) {
         return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email).getId())).getId();
     }

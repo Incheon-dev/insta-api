@@ -19,4 +19,6 @@ public interface UserService {
     String block(HttpServletRequest httpServletRequest, String email);
 
     List<UserResponse> blockList(HttpServletRequest httpServletRequest);
+
+    void unblock(HttpServletRequest httpServletRequest, String email);
 }
