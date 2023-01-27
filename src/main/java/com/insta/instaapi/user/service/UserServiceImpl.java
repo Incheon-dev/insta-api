@@ -128,6 +128,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private String isFollowedUser(Users users, String otherUserId) {
-
+        return null;
     }
 }

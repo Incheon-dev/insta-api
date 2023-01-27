@@ -1,9 +1,10 @@
-package com.insta.instaapi.utils.security.controller;
+package com.insta.instaapi.utils.security.jwt.service;
 
 import com.insta.instaapi.utils.security.dto.SignInRequest;
 import com.insta.instaapi.utils.security.dto.TokenDto;
 import com.insta.instaapi.utils.security.jwt.JwtFilter;
 import com.insta.instaapi.utils.security.jwt.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +12,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-public class AuthController {
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService{
+
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
-
-    @PostMapping("/api/account/authenticate")
-    public ResponseEntity<TokenDto> authorize(@RequestBody SignInRequest request) {
-
+    @Override
+    public ResponseEntity<TokenDto> authorize(SignInRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 
