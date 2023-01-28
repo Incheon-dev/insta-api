@@ -3,13 +3,10 @@ package com.insta.instaapi.user.service;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.user.dto.response.UserResponse;
-import com.insta.instaapi.user.entity.Authority;
-import com.insta.instaapi.user.entity.UserStatus;
-import com.insta.instaapi.user.entity.Users;
-import com.insta.instaapi.user.entity.UsersBlock;
+import com.insta.instaapi.user.entity.*;
 import com.insta.instaapi.user.entity.repository.UsersBlockRepository;
+import com.insta.instaapi.user.entity.repository.UsersFollowRepository;
 import com.insta.instaapi.user.entity.repository.UsersRepository;
-import com.insta.instaapi.user.entity.repository.queryDSL.DslUsersBlockRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedException;
 import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.user.exception.UserNotFoundException;
@@ -33,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
     private final UsersBlockRepository usersBlockRepository;
-    private final DslUsersBlockRepository dslUsersBlockRepository;
+    private final UsersFollowRepository usersFollowRepository;
 
     @Override
     public String create(SignUpRequest request) {
@@ -65,36 +62,44 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse search(HttpServletRequest servletRequest, String email) {
-        existsByUserIdAndOtherUserId(current(servletRequest), findByEmail(email).getId());
+        isBlock(current(servletRequest), findByEmail(email));
 
         Users user = findByEmail(email);
         return UserResponse.of(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserResponse> blockList(HttpServletRequest httpServletRequest) {
         List<UsersBlock> blockList = usersBlockRepository.findAllByUsers(current(httpServletRequest));
-        List<String> otherUserList = blockList.stream().map(block -> block.getOtherUserId()).collect(Collectors.toList());
-        return findByUserId(otherUserList);
+        List<String> otherUserList = blockList.stream().map(block -> block.getBlockedUser().getId()).collect(Collectors.toList());
+        return findBlockList(otherUserList);
     }
 
     @Override
     public void unblock(HttpServletRequest httpServletRequest, String email) {
-        usersBlockRepository.deleteByUsersAndOtherUserId(current(httpServletRequest), findByEmail(email).getId());
+        usersBlockRepository.deleteByUsersAndBlockedUser(current(httpServletRequest), findByEmail(email));
     }
 
     @Override
     public String follow(HttpServletRequest httpServletRequest, String email) {
-        isFollowedUser(current(httpServletRequest), findByEmail(email).getId());
-        return null;
+        return usersFollowRepository.save(new UsersFollow(current(httpServletRequest), findByEmail(email))).getId();
+    }
+
+    @Override
+    public UserResponse info(HttpServletRequest httpServletRequest, String userId) {
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
+
+        return UserResponse.info(user, isFollowing(current(httpServletRequest), user), isFollowed(user, current(httpServletRequest)));
     }
 
     @Override
     public String block(HttpServletRequest httpServletRequest, String email) {
-        return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email).getId())).getId();
+        return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email))).getId();
     }
 
-    private List<UserResponse> findByUserId(List<String> otherUserList) {
+    private List<UserResponse> findBlockList(List<String> otherUserList) {
         List<UserResponse> result = new ArrayList<>();
         for (String userId: otherUserList) {
             Users user = usersRepository.findById(userId)
@@ -121,13 +126,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void existsByUserIdAndOtherUserId(Users users, String otherUserId) {
-        if (usersBlockRepository.existsByUsersAndOtherUserId(users, otherUserId)) {
+    private void isBlock(Users users, Users blockedUser) {
+        if (usersBlockRepository.existsByUsersAndBlockedUser(blockedUser, users)) {
             throw new UserException("차단된 유저입니다.");
         }
     }
 
-    private String isFollowedUser(Users users, String otherUserId) {
-        return null;
+    private Boolean isFollowing(Users following, Users followed) {
+        return usersFollowRepository.existsByFollowingAndFollowed(following, followed);
+    }
+
+    private Boolean isFollowed(Users followed, Users following) {
+        return usersFollowRepository.existsByFollowingAndFollowed(followed, following);
     }
 }

@@ -17,19 +17,20 @@ public class UsersBlock extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private Users users;
 
-    @Column
-    private String otherUserId;
+    @ManyToOne
+    @JoinColumn(name = "other_user_id", nullable = false)
+    private Users blockedUser;
 
     @Builder
-    public UsersBlock(Users users, String otherUserId) {
+    public UsersBlock(Users users, Users blockedUser) {
         this.users = users;
-        this.otherUserId = otherUserId;
+        this.blockedUser = blockedUser;
     }
 
-    public UsersBlock create(Users users, String otherUserId) {
+    public UsersBlock create(Users users, Users blockedUser) {
         return UsersBlock.builder()
                 .users(users)
-                .otherUserId(otherUserId)
+                .blockedUser(blockedUser)
                 .build();
     }
 }

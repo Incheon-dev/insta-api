@@ -16,16 +16,19 @@ public class UserResponse {
     private String nickname;
     private String introduction;
     private String sex;
+    private Boolean isFollowing;
+    private Boolean isFollowed;
 
-    @QueryProjection
     @Builder
-    public UserResponse(String id, String email, String name, String nickname, String introduction, String sex) {
+    public UserResponse(String id, String email, String name, String nickname, String introduction, String sex, Boolean isFollowing, Boolean isFollowed) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.introduction = introduction;
         this.sex = sex;
+        this.isFollowing = isFollowing;
+        this.isFollowed = isFollowed;
     }
 
     public static UserResponse of(Users user) {
@@ -36,6 +39,19 @@ public class UserResponse {
                 .nickname(user.getNickname())
                 .introduction(user.getIntroduction())
                 .sex(user.getSex())
+                .build();
+    }
+
+    public static UserResponse info(Users user, Boolean isFollowing, Boolean isFollowed) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .introduction(user.getIntroduction())
+                .sex(user.getSex())
+                .isFollowing(isFollowing)
+                .isFollowed(isFollowed)
                 .build();
     }
 }

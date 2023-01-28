@@ -15,14 +15,15 @@ public class UsersFollow extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users users;
+    private Users following;
 
-    @Column
-    private String otherUserId;
+    @ManyToOne
+    @JoinColumn(name = "other_user_id", nullable = false)
+    private Users followed;
 
     @Builder
-    public UsersFollow(Users users, String otherUserId) {
-        this.users = users;
-        this.otherUserId = otherUserId;
+    public UsersFollow(Users following, Users followed) {
+        this.following = following;
+        this.followed = followed;
     }
 }

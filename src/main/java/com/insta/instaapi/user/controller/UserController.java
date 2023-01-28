@@ -118,4 +118,16 @@ public class UserController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/api/user")
+    public ResponseEntity<UserResponse> info(HttpServletRequest httpServletRequest, @RequestParam String userId) {
+        UserResponse response = null;
+
+        try {
+            response = userService.info(httpServletRequest, userId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
 }

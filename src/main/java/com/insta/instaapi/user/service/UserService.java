@@ -23,4 +23,6 @@ public interface UserService {
     void unblock(HttpServletRequest httpServletRequest, String email);
 
     String follow(HttpServletRequest httpServletRequest, String email);
+
+    UserResponse info(HttpServletRequest httpServletRequest, String userId);
 }
