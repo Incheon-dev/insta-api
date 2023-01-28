@@ -20,8 +20,8 @@ public class AuthController {
         return authService.authorize(request);
     }
 
-    @PostMapping("/api/account/token")
-    public ResponseEntity<?> token(@RequestBody RefreshTokenRequest request) {
-        return authService.token(request);
+    @PostMapping("/api/account/reissue")
+    public ResponseEntity<?> reissue(@RequestBody RefreshTokenRequest request) {
+        return authService.reissue(request);
     }
 }

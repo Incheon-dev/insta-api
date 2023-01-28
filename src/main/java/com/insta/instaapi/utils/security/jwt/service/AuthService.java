@@ -8,5 +8,5 @@ import org.springframework.http.ResponseEntity;
 public interface AuthService {
     ResponseEntity<TokenResponse> authorize(SignInRequest request);
 
-    ResponseEntity<?> token(RefreshTokenRequest request);
+    ResponseEntity<?> reissue(RefreshTokenRequest request);
 }

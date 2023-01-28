@@ -52,14 +52,14 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public ResponseEntity<?> token(RefreshTokenRequest request) {
+    public ResponseEntity<?> reissue(RefreshTokenRequest request) {
         if (!redisUtil.getData(request.getEmail()).equals(request.getRefreshToken())) {
             return ResponseEntity.badRequest().body("토큰이 유효하지 않습니다.");
         }
 
         Authentication authentication = tokenProvider.getAuthentication(request.getAccessToken());
         String accessToken = tokenProvider.createToken(authentication);
-        redisUtil.setDataExpire(request.getEmail(), request.getRefreshToken(), refreshTokenValidityInMilliseconds);
+        redisUtil.setData(request.getEmail(), request.getRefreshToken());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
