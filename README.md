@@ -24,9 +24,14 @@
 |/api/account|새로운 비밀번호 입력|PUT|
 |/api/user/uploader|이미지 등록|POST|
 |/api/user/post|글 등록|POST|
-|/api/user/search|유저 검색|GET|
-|/api/user/block|유저 차단|POST|
+|/api/user/search?email={email}|유저 검색|GET|
+|/api/user/block?email={email}|유저 차단|POST|
 |/api/user/block/list|유저 차단 목록|POST|
+|/api/user/unblock?email={email}|유저 차단 해제|DELETE|
+|/api/user/follow?email={email}|유저 팔로우|POST|
+|/api/user/unfollow?email={email}|유저 언팔로우|DELETE|
+|/api/user?userId={userId}|유저 목록 조회|GET|
+
 </br>
 
 ## 3. erd
