@@ -50,7 +50,6 @@ public class PostsServiceImpl implements PostsService {
     @Transactional(readOnly = true)
     @Override
     public List<InfoResponse> posts(HttpServletRequest httpServletRequest) {
-        System.out.println(current(httpServletRequest).getId());
         List<InfoResponse> info = dslPostsRepository.followingPosts(current(httpServletRequest).getId());
         List<InfoResponse> result = new ArrayList<>();
 
