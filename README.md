@@ -31,6 +31,11 @@
 |/api/user/follow?email={email}|유저 팔로우|POST|
 |/api/user/unfollow?email={email}|유저 언팔로우|DELETE|
 |/api/user?userId={userId}|유저 목록 조회|GET|
+|/api/user/post|글 등록|POST|
+|/api/user/posts|전체 글 조회|GET|
+|/api/user/posts/{email}|특정 유저 전체 글 조회|GET|
+|/api/user/post/{id}|특정 글 조회|GET|
+
 
 </br>
 
