@@ -1,6 +1,5 @@
 package com.insta.instaapi.post.dto.request;
 
-import com.insta.instaapi.post.entity.PostsStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -31,25 +31,21 @@ public class Posts extends BaseEntity {
     @Column
     private Boolean isComment;
 
-    @Column
-    private String photo;
-
     @Enumerated(value = EnumType.STRING)
     @Column
     private PostsStatus postsStatus;
 
     @Builder
-    public Posts(Users users, String postsContent, String location, Boolean isHide, Boolean isComment, PostsStatus postsStatus, String photo) {
+    public Posts(Users users, String postsContent, String location, Boolean isHide, Boolean isComment, PostsStatus postsStatus) {
         this.users = users;
         this.postsContent = postsContent;
         this.location = location;
         this.isHide = isHide;
         this.isComment = isComment;
         this.postsStatus = postsStatus;
-        this.photo = photo;
     }
 
-    public Posts create(PostRequest request, Users users, String photo, PostsStatus postsStatus) {
+    public Posts create(PostRequest request, Users users, PostsStatus postsStatus) {
         return Posts.builder()
                 .users(users)
                 .postsContent(request.getPostContent())
@@ -57,7 +53,6 @@ public class Posts extends BaseEntity {
                 .isHide(request.getIsHide())
                 .isComment(request.getIsComment())
                 .postsStatus(postsStatus)
-                .photo(photo)
                 .build();
     }
 }

@@ -115,12 +115,12 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public Users current(HttpServletRequest servletRequest) {
-        String info = jwtService.token(servletRequest).getSubject();
+    public Users current(HttpServletRequest httpServletRequest) {
+        String info = jwtService.token(httpServletRequest).getSubject();
         return findByEmail(info);
     }
 
-    private Users findByEmail(String email) {
+    public Users findByEmail(String email) {
         return usersRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
     }
@@ -143,5 +143,10 @@ public class UserServiceImpl implements UserService {
 
     private Boolean isFollowed(Users followed, Users following) {
         return usersFollowRepository.existsByFollowingAndFollowed(followed, following);
+    }
+
+    public Users findById(String userId) {
+        return usersRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
     }
 }

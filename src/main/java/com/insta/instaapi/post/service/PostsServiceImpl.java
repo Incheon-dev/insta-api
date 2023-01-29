@@ -1,15 +1,25 @@
 package com.insta.instaapi.post.service;
 
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.dto.response.InfoResponse;
+import com.insta.instaapi.post.dto.response.PostResponse;
 import com.insta.instaapi.post.entity.Posts;
+import com.insta.instaapi.post.entity.PostsPhotos;
 import com.insta.instaapi.post.entity.PostsStatus;
+import com.insta.instaapi.post.entity.repository.PostsPhotosRepository;
 import com.insta.instaapi.post.entity.repository.PostsRepository;
+import com.insta.instaapi.post.entity.repository.queryDSL.DslPostsRepository;
+import com.insta.instaapi.post.exception.PostException;
+import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -18,15 +28,67 @@ public class PostsServiceImpl implements PostsService {
 
     private final UserServiceImpl userService;
     private final PostsRepository postsRepository;
+    private final PostsPhotosRepository postsPhotosRepository;
+    private final DslPostsRepository dslPostsRepository;
 
     @Override
-    public String post(HttpServletRequest servletRequest, PostRequest requests) {
-        String postId = "";
+    public String create(HttpServletRequest httpServletRequest, PostRequest requests) {
+        Posts posts = postsRepository.save(new Posts().create(requests, current(httpServletRequest), PostsStatus.NOT_DELETED));
+        savePhotos(posts, requests.getPhotos());
+        return posts.getId();
+    }
 
-        for (String photo: requests.getPhotos()) {
-            postId = postsRepository.save(new Posts().create(requests, userService.current(servletRequest), photo, PostsStatus.NOT_DELETED)).getId();
+    @Transactional(readOnly = true)
+    @Override
+    public PostResponse post(HttpServletRequest httpServletRequest, String postId) {
+        Posts post = postsRepository.findById(postId)
+                .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
+
+        return PostResponse.toEntity(post, photos(post));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<InfoResponse> posts(HttpServletRequest httpServletRequest) {
+        System.out.println(current(httpServletRequest).getId());
+        List<InfoResponse> info = dslPostsRepository.followingPosts(current(httpServletRequest).getId());
+        List<InfoResponse> result = new ArrayList<>();
+
+        for (InfoResponse info1: info) {
+            List<String> photos = postsPhotosRepository.findAllByPosts(postsRepository.findById(info1.getPostId())
+                    .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."))).stream().map(photo -> photo.getPhoto()).collect(Collectors.toList());
+            result.add(InfoResponse.of(info1, photos));
         }
+        return result;
+    }
 
-        return postId;
+    @Transactional(readOnly = true)
+    @Override
+    public List<PostResponse> posts(HttpServletRequest httpServletRequest, String email) {
+        List<Posts> posts = postsRepository.findByUsers(findByEmail(email));
+        List<PostResponse> result = new ArrayList<>();
+
+        for (Posts post: posts) {
+            result.add(PostResponse.of(post, photos(post)));
+        }
+        return result;
+    }
+
+    private Users current(HttpServletRequest httpServletRequest) {
+        return userService.current(httpServletRequest);
+    }
+
+    private void savePhotos(Posts posts, List<String> photos) {
+        for (String photo: photos) {
+            postsPhotosRepository.save(new PostsPhotos(posts, photo));
+        }
+    }
+
+    private List<String> photos(Posts post) {
+        return postsPhotosRepository.findAllByPosts(post).stream().map(photo -> photo.getPhoto()).collect(Collectors.toList());
+    }
+
+    private Users findByEmail(String email) {
+        return userService.findByEmail(email);
     }
 }

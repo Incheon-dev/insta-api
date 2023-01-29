@@ -5,7 +5,7 @@ CREATE TABLE posts (
     `updated_date` DATETIME,
     `posts_content` longtext,
     `location` varchar(100),
-    `is_hide` boolean DEFAULT true,
+    `is_hide` boolean DEFAULT false,
     `is_comment` boolean DEFAULT true,
     `posts_status` varchar(32),
     PRIMARY KEY (id),

@@ -88,6 +88,7 @@ dependencies {
     // querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
@@ -96,7 +97,6 @@ querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
 }
-
 sourceSets {
     main.java.srcDir querydslDir
 }

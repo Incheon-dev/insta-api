@@ -1,7 +1,6 @@
 package com.insta.instaapi.user.dto.response;
 
 import com.insta.instaapi.user.entity.Users;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
