@@ -23,7 +23,6 @@
 |/api/account/find|이메일 찾기|GET|
 |/api/account|새로운 비밀번호 입력|PUT|
 |/api/user/uploader|이미지 등록|POST|
-|/api/user/post|글 등록|POST|
 |/api/user/search?email={email}|유저 검색|GET|
 |/api/user/block?email={email}|유저 차단|POST|
 |/api/user/block/list|유저 차단 목록|POST|
