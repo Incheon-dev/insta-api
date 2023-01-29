@@ -24,5 +24,7 @@ public interface UserService {
 
     String follow(HttpServletRequest httpServletRequest, String email);
 
+    void unfollow(HttpServletRequest httpServletRequest, String email);
+
     UserResponse info(HttpServletRequest httpServletRequest, String userId);
 }

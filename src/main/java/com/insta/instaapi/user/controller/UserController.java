@@ -119,6 +119,16 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/api/user/unfollow")
+    public ResponseEntity<Void> unfollow(HttpServletRequest httpServletRequest, @RequestParam String email) {
+        try {
+            userService.unfollow(httpServletRequest, email);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/api/user")
     public ResponseEntity<UserResponse> info(HttpServletRequest httpServletRequest, @RequestParam String userId) {
         UserResponse response = null;
