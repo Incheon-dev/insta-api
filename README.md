@@ -16,7 +16,7 @@
 |domain|description|http protocol|
 |:------:|:-----------:|:-------------:|
 |/api/account/sign-up|회원가입|POST|
-|/api/account/authenticate|로그인|POST|
+|/api/account/login|로그인|POST|
 |/api/account/verify?email={email}|이메일 확인|GET|
 |/api/account/verify|이메일 확인 인증번호 검증|POST|
 |/api/account?email={email}|이메일 중복 검증|GET|
