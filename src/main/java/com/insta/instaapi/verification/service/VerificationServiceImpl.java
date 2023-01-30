@@ -30,7 +30,7 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public Boolean verify(VerificationRequest request) {
+    public Boolean verifyNumber(VerificationRequest request) {
         return Objects.equals(request.getEmail(), redisUtil.getData(request.getAuthKey()));
     }
 

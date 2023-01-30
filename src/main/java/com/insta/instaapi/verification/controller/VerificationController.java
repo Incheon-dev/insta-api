@@ -18,10 +18,10 @@ public class VerificationController {
     private final VerificationService emailService;
 
     @PostMapping("/api/account/verify")
-    public ResponseEntity<Boolean> verify(@RequestBody VerificationRequest request) {
+    public ResponseEntity<Boolean> verifyNumber(@RequestBody VerificationRequest request) {
         Boolean response = null;
         try {
-            response = emailService.verify(request);
+            response = emailService.verifyNumber(request);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
