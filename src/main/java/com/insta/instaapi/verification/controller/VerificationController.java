@@ -38,7 +38,7 @@ public class VerificationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/account/find")
+    @PostMapping("/api/account/find")
     public ResponseEntity<Void> forgetPassword(@RequestBody FindRequest request) {
         try {
             emailService.forgetPassword(request);
