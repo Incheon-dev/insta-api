@@ -42,28 +42,30 @@ public class AuthServiceImpl implements AuthService{
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String accessToken = tokenProvider.createToken(authentication);
-        String refreshToken = tokenProvider.createRefreshToken();
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
         redisUtil.setDataExpire(request.getEmail(), refreshToken, refreshTokenValidityInMilliseconds);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 
-        return new ResponseEntity<>(new TokenResponse(accessToken, refreshToken), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenResponse(accessToken), httpHeaders, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> reissue(RefreshTokenRequest request) {
-        if (!redisUtil.getData(request.getEmail()).equals(request.getRefreshToken())) {
+        String refreshToken = redisUtil.getData(request.getEmail());
+
+        if (refreshToken == null) {
             return ResponseEntity.badRequest().body("토큰이 유효하지 않습니다.");
         }
 
-        Authentication authentication = tokenProvider.getAuthentication(request.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
         String accessToken = tokenProvider.createToken(authentication);
-        redisUtil.setData(request.getEmail(), request.getRefreshToken());
+        redisUtil.setData(request.getEmail(), refreshToken);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 
-        return new ResponseEntity<>(new TokenResponse(accessToken, request.getRefreshToken()), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenResponse(accessToken), httpHeaders, HttpStatus.OK);
     }
 }

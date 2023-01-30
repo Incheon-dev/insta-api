@@ -9,5 +9,4 @@ public class RefreshTokenRequest {
 
     private String email;
     private String accessToken;
-    private String refreshToken;
 }
