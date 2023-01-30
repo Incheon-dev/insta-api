@@ -20,11 +20,11 @@ public class PostsController {
     private final PostsService postsService;
 
     @PostMapping("/api/user/post")
-    public ResponseEntity<String> create(HttpServletRequest httpServletRequest, @RequestBody PostRequest requests) {
+    public ResponseEntity<String> post(HttpServletRequest httpServletRequest, @RequestBody PostRequest requests) {
         String response = "";
 
         try {
-            response = postsService.create(httpServletRequest, requests);
+            response = postsService.post(httpServletRequest, requests);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -32,11 +32,11 @@ public class PostsController {
     }
 
     @GetMapping("/api/user/posts")
-    public ResponseEntity<List<InfoResponse>> posts(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<InfoResponse>> allPosts(HttpServletRequest httpServletRequest) {
         List<InfoResponse> response = null;
 
         try {
-            response = postsService.posts(httpServletRequest);
+            response = postsService.allPosts(httpServletRequest);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -44,11 +44,11 @@ public class PostsController {
     }
 
     @GetMapping("/api/user/posts/{email}")
-    public ResponseEntity<List<PostResponse>> posts(HttpServletRequest httpServletRequest, @PathVariable String email) {
+    public ResponseEntity<List<PostResponse>> userPosts(HttpServletRequest httpServletRequest, @PathVariable String email) {
         List<PostResponse> response = null;
 
         try {
-            response = postsService.posts(httpServletRequest, email);
+            response = postsService.userPosts(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -56,11 +56,11 @@ public class PostsController {
     }
 
     @GetMapping("/api/user/post/{id}")
-    public ResponseEntity<PostResponse> post(HttpServletRequest httpServletRequest, @PathVariable String id) {
+    public ResponseEntity<PostResponse> userPost(HttpServletRequest httpServletRequest, @PathVariable String id) {
         PostResponse response = null;
 
         try {
-            response = postsService.post(httpServletRequest, id);
+            response = postsService.userPost(httpServletRequest, id);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

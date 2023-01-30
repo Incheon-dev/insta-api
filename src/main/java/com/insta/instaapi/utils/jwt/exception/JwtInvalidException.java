@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.jwt.exception;
+package com.insta.instaapi.utils.jwt.exception;
 
 public class JwtInvalidException extends RuntimeException {
 

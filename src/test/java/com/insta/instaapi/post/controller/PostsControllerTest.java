@@ -2,8 +2,8 @@ package com.insta.instaapi.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.utils.jwt.config.*;
 import com.insta.instaapi.utils.security.config.SecurityConfig;
-import com.insta.instaapi.utils.security.jwt.config.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

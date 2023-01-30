@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface UserService {
-    String create(SignUpRequest request);
+    String signup(SignUpRequest request);
 
-    Boolean validate(String email);
+    Boolean validateEmail(String email);
 
-    String reset(UpdatePasswordRequest request);
+    String resetPassword(UpdatePasswordRequest request);
 
     UserResponse search(HttpServletRequest httpServletRequest, String email);
 
@@ -26,5 +26,5 @@ public interface UserService {
 
     void unfollow(HttpServletRequest httpServletRequest, String email);
 
-    UserResponse info(HttpServletRequest httpServletRequest, String userId);
+    UserResponse userInfo(HttpServletRequest httpServletRequest, String userId);
 }

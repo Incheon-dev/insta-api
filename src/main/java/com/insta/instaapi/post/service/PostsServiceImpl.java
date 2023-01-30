@@ -32,7 +32,7 @@ public class PostsServiceImpl implements PostsService {
     private final DslPostsRepository dslPostsRepository;
 
     @Override
-    public String create(HttpServletRequest httpServletRequest, PostRequest requests) {
+    public String post(HttpServletRequest httpServletRequest, PostRequest requests) {
         Posts posts = postsRepository.save(new Posts().create(requests, current(httpServletRequest), PostsStatus.NOT_DELETED));
         savePhotos(posts, requests.getPhotos());
         return posts.getId();
@@ -40,7 +40,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Transactional(readOnly = true)
     @Override
-    public PostResponse post(HttpServletRequest httpServletRequest, String postId) {
+    public PostResponse userPost(HttpServletRequest httpServletRequest, String postId) {
         Posts post = postsRepository.findById(postId)
                 .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
 
@@ -49,7 +49,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<InfoResponse> posts(HttpServletRequest httpServletRequest) {
+    public List<InfoResponse> allPosts(HttpServletRequest httpServletRequest) {
         List<InfoResponse> info = dslPostsRepository.followingPosts(current(httpServletRequest).getId());
         List<InfoResponse> result = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<PostResponse> posts(HttpServletRequest httpServletRequest, String email) {
+    public List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email) {
         List<Posts> posts = postsRepository.findByUsers(findByEmail(email));
         List<PostResponse> result = new ArrayList<>();
 

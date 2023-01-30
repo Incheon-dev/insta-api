@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.jwt.config;
+package com.insta.instaapi.utils.jwt.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

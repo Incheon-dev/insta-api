@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.jwt.dto.response;
+package com.insta.instaapi.utils.jwt.dto.response;
 
 import lombok.*;
 

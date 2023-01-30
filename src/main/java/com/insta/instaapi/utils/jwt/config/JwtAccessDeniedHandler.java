@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.jwt.config;
+package com.insta.instaapi.utils.jwt.config;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

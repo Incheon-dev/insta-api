@@ -1,9 +1,9 @@
 package com.insta.instaapi.utils.security.config;
 
-import com.insta.instaapi.utils.security.jwt.config.JwtAccessDeniedHandler;
-import com.insta.instaapi.utils.security.jwt.config.JwtAuthenticationEntryPoint;
-import com.insta.instaapi.utils.security.jwt.config.JwtSecurityConfig;
-import com.insta.instaapi.utils.security.jwt.config.TokenProvider;
+import com.insta.instaapi.utils.jwt.config.JwtAccessDeniedHandler;
+import com.insta.instaapi.utils.jwt.config.JwtAuthenticationEntryPoint;
+import com.insta.instaapi.utils.jwt.config.JwtSecurityConfig;
+import com.insta.instaapi.utils.jwt.config.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

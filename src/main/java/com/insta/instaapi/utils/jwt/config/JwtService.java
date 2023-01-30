@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.jwt.config;
+package com.insta.instaapi.utils.jwt.config;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

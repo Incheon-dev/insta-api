@@ -1,11 +1,11 @@
-package com.insta.instaapi.utils.security.jwt.service;
+package com.insta.instaapi.utils.jwt.service;
 
+import com.insta.instaapi.utils.jwt.config.TokenProvider;
 import com.insta.instaapi.utils.redis.RedisUtil;
-import com.insta.instaapi.utils.security.jwt.dto.request.RefreshTokenRequest;
-import com.insta.instaapi.utils.security.jwt.dto.request.SignInRequest;
-import com.insta.instaapi.utils.security.jwt.dto.response.TokenResponse;
-import com.insta.instaapi.utils.security.jwt.config.JwtFilter;
-import com.insta.instaapi.utils.security.jwt.config.TokenProvider;
+import com.insta.instaapi.utils.jwt.dto.request.RefreshTokenRequest;
+import com.insta.instaapi.utils.jwt.dto.request.SignInRequest;
+import com.insta.instaapi.utils.jwt.dto.response.TokenResponse;
+import com.insta.instaapi.utils.jwt.config.JwtFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService{
 
 
     @Override
-    public ResponseEntity<TokenResponse> authorize(SignInRequest request) {
+    public ResponseEntity<TokenResponse> login(SignInRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 

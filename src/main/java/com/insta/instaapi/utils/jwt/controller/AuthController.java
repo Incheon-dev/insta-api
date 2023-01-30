@@ -1,9 +1,9 @@
-package com.insta.instaapi.utils.security.jwt.controller;
+package com.insta.instaapi.utils.jwt.controller;
 
-import com.insta.instaapi.utils.security.jwt.dto.request.RefreshTokenRequest;
-import com.insta.instaapi.utils.security.jwt.dto.request.SignInRequest;
-import com.insta.instaapi.utils.security.jwt.dto.response.TokenResponse;
-import com.insta.instaapi.utils.security.jwt.service.AuthService;
+import com.insta.instaapi.utils.jwt.dto.request.RefreshTokenRequest;
+import com.insta.instaapi.utils.jwt.dto.request.SignInRequest;
+import com.insta.instaapi.utils.jwt.dto.response.TokenResponse;
+import com.insta.instaapi.utils.jwt.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/api/account/authenticate")
-    public ResponseEntity<TokenResponse> authorize(@RequestBody SignInRequest request) {
-        return authService.authorize(request);
+    @PostMapping("/api/account/login")
+    public ResponseEntity<TokenResponse> login(@RequestBody SignInRequest request) {
+        return authService.login(request);
     }
 
     @PostMapping("/api/account/reissue")

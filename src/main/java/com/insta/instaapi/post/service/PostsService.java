@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface PostsService {
-    String create(HttpServletRequest httpServletRequest, PostRequest requests);
+    String post(HttpServletRequest httpServletRequest, PostRequest requests);
 
-    List<PostResponse> posts(HttpServletRequest httpServletRequest, String email);
+    List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email);
 
-    PostResponse post(HttpServletRequest httpServletRequest, String postId);
+    PostResponse userPost(HttpServletRequest httpServletRequest, String postId);
 
-    List<InfoResponse> posts(HttpServletRequest httpServletRequest);
+    List<InfoResponse> allPosts(HttpServletRequest httpServletRequest);
 }

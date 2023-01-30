@@ -21,11 +21,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/account/sign-up")
-    public ResponseEntity<String> create(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequest request) {
         String response = "";
 
         try {
-            response = userService.create(request);
+            response = userService.signup(request);
         } catch (Exception e) {
             log.error(e.getMessage());
             response = e.getMessage();
@@ -34,11 +34,11 @@ public class UserController {
     }
 
     @GetMapping("/api/account")
-    public ResponseEntity<Boolean> validate(@RequestParam String email) {
+    public ResponseEntity<Boolean> validateEmail(@RequestParam String email) {
         Boolean response;
 
         try {
-            response = userService.validate(email);
+            response = userService.validateEmail(email);
         } catch (Exception e) {
             log.error(e.getMessage());
             response = null;
@@ -47,11 +47,11 @@ public class UserController {
     }
 
     @PutMapping("/api/account")
-    public ResponseEntity<String> reset(@Valid @RequestBody UpdatePasswordRequest request) {
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody UpdatePasswordRequest request) {
         String response = "";
 
         try {
-            response = userService.reset(request);
+            response = userService.resetPassword(request);
         } catch (Exception e) {
             log.error(e.getMessage());
             response = e.getMessage();
@@ -130,11 +130,11 @@ public class UserController {
     }
 
     @GetMapping("/api/user")
-    public ResponseEntity<UserResponse> info(HttpServletRequest httpServletRequest, @RequestParam String userId) {
+    public ResponseEntity<UserResponse> userInfo(HttpServletRequest httpServletRequest, @RequestParam String userId) {
         UserResponse response = null;
 
         try {
-            response = userService.info(httpServletRequest, userId);
+            response = userService.userInfo(httpServletRequest, userId);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

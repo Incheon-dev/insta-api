@@ -10,7 +10,7 @@ import com.insta.instaapi.user.entity.repository.UsersRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedException;
 import com.insta.instaapi.user.exception.UserException;
 import com.insta.instaapi.user.exception.UserNotFoundException;
-import com.insta.instaapi.utils.security.jwt.config.JwtService;
+import com.insta.instaapi.utils.jwt.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UsersFollowRepository usersFollowRepository;
 
     @Override
-    public String create(SignUpRequest request) {
+    public String signup(SignUpRequest request) {
 
         if (usersRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new UserDuplicatedException("해당 번호로 가입된 유저가 존재합니다.");
@@ -48,12 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public Boolean validate(String email) {
+    public Boolean validateEmail(String email) {
         return usersRepository.existsByEmail(email);
     }
 
     @Override
-    public String reset(UpdatePasswordRequest request) {
+    public String resetPassword(UpdatePasswordRequest request) {
         Users user = findByEmail(request.getEmail());
         user.reset(passwordEncoder.encode(request.getNewPassword()));
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse info(HttpServletRequest httpServletRequest, String userId) {
+    public UserResponse userInfo(HttpServletRequest httpServletRequest, String userId) {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
 

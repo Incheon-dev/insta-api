@@ -1,4 +1,4 @@
-package com.insta.instaapi.utils.security.jwt.config;
+package com.insta.instaapi.utils.jwt.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
