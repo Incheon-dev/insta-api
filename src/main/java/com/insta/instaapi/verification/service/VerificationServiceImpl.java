@@ -35,7 +35,7 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public void existEmail(FindRequest request) {
+    public void forgetPassword(FindRequest request) {
         userService.existsByEmailAndPhoneNumberAndName(request.getEmail(), request.getPhoneNumber(), request.getName());
         EmailConstructor constructor = create();
         sendEmail(request.getEmail(), constructor.getAuthKey(), constructor.getSubject(), constructor.getText());

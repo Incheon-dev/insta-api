@@ -39,9 +39,9 @@ public class VerificationController {
     }
 
     @GetMapping("/api/account/find")
-    public ResponseEntity<Void> existEmail(@RequestBody FindRequest request) {
+    public ResponseEntity<Void> forgetPassword(@RequestBody FindRequest request) {
         try {
-            emailService.existEmail(request);
+            emailService.forgetPassword(request);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
