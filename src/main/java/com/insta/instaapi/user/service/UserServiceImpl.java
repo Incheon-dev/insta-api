@@ -61,11 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse search(HttpServletRequest servletRequest, String email) {
-        isBlock(current(servletRequest), findByEmail(email));
+    public UserResponse search(HttpServletRequest httpServletRequest, String email) {
+        isBlock(current(httpServletRequest), findByEmail(email));
 
         Users user = findByEmail(email);
-        return UserResponse.of(user);
+        return UserResponse.info(user, isFollowing(current(httpServletRequest), user), isFollowed(user, current(httpServletRequest)));
     }
 
     @Transactional(readOnly = true)
@@ -93,9 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse userInfo(HttpServletRequest httpServletRequest, String userId) {
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
-
+        Users user = findById(userId);
         return UserResponse.info(user, isFollowing(current(httpServletRequest), user), isFollowed(user, current(httpServletRequest)));
     }
 
