@@ -8,6 +8,7 @@
 2. [uri](#2-uri)</br>
 3. [erd](#3-erd)</br>
 4. [notion](#4-notion)</br>
+5. [result]($5-result)</br>
 
 ## 1. version
 <img src="https://img.shields.io/badge/Java 11-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/SpringBoot 2.5.5-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"> <img src="https://img.shields.io/badge/Gradle 7.3.3-02303A?style=for-the-badge&logo=Gradle&logoColor=white"> <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=MariaDB&logoColor=white"> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon RDS&logoColor=white"> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white"> </br>
@@ -44,4 +45,8 @@
 
 ## 4. notion
 [Notion Link](https://fan-yuzu-49b.notion.site/Instagram-Clone-b6d81942158442c596daa9dfe120c0b1)
+</br>
+
+## 5. result
+[Result](https://fan-yuzu-49b.notion.site/fb1199c472f246f1bbc6a65b13e724c1)
 </br>
