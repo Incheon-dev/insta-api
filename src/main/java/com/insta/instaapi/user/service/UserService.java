@@ -29,4 +29,6 @@ public interface UserService {
     UserResponse userInfo(HttpServletRequest httpServletRequest, String email);
 
     String profileImage(HttpServletRequest httpServletRequest, String imageUrl);
+
+    String deleteProfileImage(HttpServletRequest httpServletRequest);
 }

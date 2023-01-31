@@ -144,8 +144,22 @@ public class UserController {
     @PatchMapping("/api/user/profile-image")
     public ResponseEntity<?> profileImage(HttpServletRequest httpServletRequest, @RequestParam String imageUrl) {
         String response = "";
+
         try {
             response = userService.profileImage(httpServletRequest, imageUrl);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PatchMapping("/api/user/delete/profile-image")
+    public ResponseEntity<?> deleteProfileImage(HttpServletRequest httpServletRequest) {
+        String response = "";
+
+        try {
+            response = userService.deleteProfileImage(httpServletRequest);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());

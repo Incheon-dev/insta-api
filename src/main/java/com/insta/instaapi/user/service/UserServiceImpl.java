@@ -115,6 +115,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String deleteProfileImage(HttpServletRequest httpServletRequest) {
+        Users user = findByEmail(current(httpServletRequest).getEmail());
+        user.profileImage(null);
+
+        return "삭제되었습니다.";
+    }
+
+    @Override
     public String block(HttpServletRequest httpServletRequest, String email) {
         return usersBlockRepository.save(new UsersBlock().create(current(httpServletRequest), findByEmail(email))).getId();
     }
