@@ -27,4 +27,6 @@ public interface UserService {
     void unfollow(HttpServletRequest httpServletRequest, String email);
 
     UserResponse userInfo(HttpServletRequest httpServletRequest, String email);
+
+    String profileImage(HttpServletRequest httpServletRequest, String imageUrl);
 }

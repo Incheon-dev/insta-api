@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class UserResponse {
 
     private String id;
+    private String profileImage;
     private String email;
     private String name;
     private String nickname;
@@ -22,9 +23,10 @@ public class UserResponse {
     private Long following;
 
     @Builder
-    public UserResponse(String id, String email, String name, String nickname, String introduction, String sex,
+    public UserResponse(String id, String profileImage, String email, String name, String nickname, String introduction, String sex,
                         Boolean isFollowing, Boolean isFollowed, long postsCount, long follower, long following) {
         this.id = id;
+        this.profileImage = profileImage;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
@@ -51,6 +53,7 @@ public class UserResponse {
     public static UserResponse search(Users user, Boolean isFollowing, Boolean isFollowed) {
         return UserResponse.builder()
                 .id(user.getId())
+                .profileImage(user.getProfileImage())
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
@@ -64,6 +67,7 @@ public class UserResponse {
     public static UserResponse info(Users user, Boolean isFollowing, Boolean isFollowed, Long countPost, Long countFollower, Long countFollow) {
         return UserResponse.builder()
                 .id(user.getId())
+                .profileImage(user.getProfileImage())
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())

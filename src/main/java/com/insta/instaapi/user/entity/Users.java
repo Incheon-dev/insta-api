@@ -83,4 +83,8 @@ public class Users extends BaseEntity {
     public void reset(String newPassword) {
         this.password = newPassword;
     }
+
+    public void profileImage(String imageUrl) {
+        this.profileImage = imageUrl;
+    }
 }

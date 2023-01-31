@@ -140,4 +140,16 @@ public class UserController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/api/user/profile-image")
+    public ResponseEntity<?> profileImage(HttpServletRequest httpServletRequest, @RequestParam String imageUrl) {
+        String response = "";
+        try {
+            response = userService.profileImage(httpServletRequest, imageUrl);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body(response);
+    }
 }
