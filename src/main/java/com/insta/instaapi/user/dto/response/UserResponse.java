@@ -17,9 +17,13 @@ public class UserResponse {
     private String sex;
     private Boolean isFollowing;
     private Boolean isFollowed;
+    private Long postsCount;
+    private Long follower;
+    private Long following;
 
     @Builder
-    public UserResponse(String id, String email, String name, String nickname, String introduction, String sex, Boolean isFollowing, Boolean isFollowed) {
+    public UserResponse(String id, String email, String name, String nickname, String introduction, String sex,
+                        Boolean isFollowing, Boolean isFollowed, long postsCount, long follower, long following) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -28,6 +32,9 @@ public class UserResponse {
         this.sex = sex;
         this.isFollowing = isFollowing;
         this.isFollowed = isFollowed;
+        this.postsCount = postsCount;
+        this.follower = follower;
+        this.following = following;
     }
 
     public static UserResponse of(Users user) {
@@ -41,7 +48,7 @@ public class UserResponse {
                 .build();
     }
 
-    public static UserResponse info(Users user, Boolean isFollowing, Boolean isFollowed) {
+    public static UserResponse search(Users user, Boolean isFollowing, Boolean isFollowed) {
         return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -51,6 +58,22 @@ public class UserResponse {
                 .sex(user.getSex())
                 .isFollowing(isFollowing)
                 .isFollowed(isFollowed)
+                .build();
+    }
+
+    public static UserResponse info(Users user, Boolean isFollowing, Boolean isFollowed, Long countPost, Long countFollower, Long countFollow) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .introduction(user.getIntroduction())
+                .sex(user.getSex())
+                .isFollowing(isFollowing)
+                .isFollowed(isFollowed)
+                .postsCount(countPost)
+                .follower(countFollower)
+                .following(countFollow)
                 .build();
     }
 }

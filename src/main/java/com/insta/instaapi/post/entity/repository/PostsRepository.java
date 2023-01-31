@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface PostsRepository extends JpaRepository<Posts, String>  {
 
     List<Posts> findByUsers(Users user);
+    Long countByUsers(Users user);
 }

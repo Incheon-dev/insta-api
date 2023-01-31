@@ -130,11 +130,11 @@ public class UserController {
     }
 
     @GetMapping("/api/user")
-    public ResponseEntity<UserResponse> userInfo(HttpServletRequest httpServletRequest, @RequestParam String userId) {
+    public ResponseEntity<UserResponse> userInfo(HttpServletRequest httpServletRequest, @RequestParam String email) {
         UserResponse response = null;
 
         try {
-            response = userService.userInfo(httpServletRequest, userId);
+            response = userService.userInfo(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

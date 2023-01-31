@@ -1,5 +1,6 @@
 package com.insta.instaapi.user.service;
 
+import com.insta.instaapi.post.entity.repository.PostsRepository;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
 import com.insta.instaapi.user.dto.response.UserResponse;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
+    private final PostsRepository postsRepository;
     private final UsersBlockRepository usersBlockRepository;
     private final UsersFollowRepository usersFollowRepository;
 
@@ -65,7 +68,7 @@ public class UserServiceImpl implements UserService {
         isBlock(current(httpServletRequest), findByEmail(email));
 
         Users user = findByEmail(email);
-        return UserResponse.info(user, isFollowing(current(httpServletRequest), user), isFollowed(user, current(httpServletRequest)));
+        return UserResponse.search(user, isFollowing(current(httpServletRequest), user), isFollowed(user, current(httpServletRequest)));
     }
 
     @Transactional(readOnly = true)
@@ -92,9 +95,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse userInfo(HttpServletRequest httpServletRequest, String userId) {
-        Users user = findById(userId);
-        return UserResponse.info(user, isFollowing(current(httpServletRequest), user), isFollowed(user, current(httpServletRequest)));
+    public UserResponse userInfo(HttpServletRequest httpServletRequest, String email) {
+        Users user = findByEmail(email);
+        Users currentUser = current(httpServletRequest);
+
+        if (Objects.equals(current(httpServletRequest).getId(), user.getId())) {
+            return UserResponse.info(user, null, null, countPost(user), countFollower(user), countFollow(user));
+        }
+
+        return UserResponse.info(user, isFollowing(currentUser, user), isFollowed(user, currentUser), countPost(user), countFollower(user), countFollow(user));
     }
 
     @Override
@@ -143,8 +152,15 @@ public class UserServiceImpl implements UserService {
         return usersFollowRepository.existsByFollowingAndFollowed(followed, following);
     }
 
-    public Users findById(String userId) {
-        return usersRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
+    private Long countPost(Users user) {
+        return postsRepository.countByUsers(user);
+    }
+
+    private Long countFollower(Users user) {
+        return usersFollowRepository.countByFollowed(user);
+    }
+
+    private Long countFollow(Users user) {
+        return usersFollowRepository.countByFollowing(user);
     }
 }
