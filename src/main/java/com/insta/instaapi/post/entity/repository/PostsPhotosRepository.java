@@ -11,4 +11,5 @@ import java.util.List;
 public interface PostsPhotosRepository extends JpaRepository<PostsPhotos, String> {
 
     List<PostsPhotos> findAllByPosts(Posts posts);
+    void deleteAllByPosts(Posts post);
 }

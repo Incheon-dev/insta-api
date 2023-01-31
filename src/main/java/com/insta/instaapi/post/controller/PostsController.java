@@ -1,6 +1,7 @@
 package com.insta.instaapi.post.controller;
 
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
 import com.insta.instaapi.post.dto.response.PostResponse;
 import com.insta.instaapi.post.service.PostsService;
@@ -20,11 +21,11 @@ public class PostsController {
     private final PostsService postsService;
 
     @PostMapping("/api/user/post")
-    public ResponseEntity<String> post(HttpServletRequest httpServletRequest, @RequestBody PostRequest requests) {
+    public ResponseEntity<String> post(HttpServletRequest httpServletRequest, @RequestBody PostRequest request) {
         String response = "";
 
         try {
-            response = postsService.post(httpServletRequest, requests);
+            response = postsService.post(httpServletRequest, request);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -65,5 +66,31 @@ public class PostsController {
             log.error(e.getMessage());
         }
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/api/user/post")
+    public ResponseEntity<?> updatePost(HttpServletRequest httpServletRequest, @RequestBody UpdatePostRequest request) {
+        String response = "";
+
+        try {
+            response = postsService.updatePost(httpServletRequest, request);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/api/user/post/{id}")
+    public ResponseEntity<?> deletePost(HttpServletRequest httpServletRequest, @PathVariable String id) {
+        String response = "";
+
+        try {
+            response = postsService.deletePost(httpServletRequest, id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+         return ResponseEntity.ok().body(response);
     }
 }

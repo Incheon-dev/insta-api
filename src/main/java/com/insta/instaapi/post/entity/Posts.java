@@ -1,6 +1,7 @@
 package com.insta.instaapi.post.entity;
 
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.utils.entity.BaseEntity;
 import lombok.Builder;
@@ -54,5 +55,17 @@ public class Posts extends BaseEntity {
                 .isComment(request.getIsComment())
                 .postsStatus(postsStatus)
                 .build();
+    }
+
+    public void update(UpdatePostRequest request) {
+        this.postsContent = request.getPostId();
+        this.location = request.getLocation();
+        this.isHide = request.getIsHide();
+        this.isComment = request.getIsComment();
+    }
+
+
+    public void delete(PostsStatus status) {
+        this.postsStatus = status;
     }
 }
