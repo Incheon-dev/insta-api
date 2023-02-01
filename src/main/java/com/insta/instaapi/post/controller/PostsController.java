@@ -9,6 +9,8 @@ import com.insta.instaapi.post.dto.response.PostResponse;
 import com.insta.instaapi.post.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -115,6 +117,32 @@ public class PostsController {
 
         try {
             response = postsService.userComment(httpServletRequest, postId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/user/post/{postId}")
+    public ResponseEntity<?> postLike(HttpServletRequest httpServletRequest, @PathVariable String postId) {
+        String response = "";
+
+        try {
+            response = postsService.postLike(httpServletRequest, postId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/user/post/{postId}/comment/{commentId}")
+    public ResponseEntity<?> commentLike(HttpServletRequest httpServletRequest, @PathVariable String postId, @PathVariable String commentId) {
+        String response = "";
+
+        try {
+            response = postsService.commentLike(httpServletRequest, postId, commentId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());

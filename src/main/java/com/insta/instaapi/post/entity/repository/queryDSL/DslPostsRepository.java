@@ -4,18 +4,18 @@ import com.insta.instaapi.post.dto.response.InfoResponse;
 import com.insta.instaapi.post.dto.response.PostCommentResponse;
 import com.insta.instaapi.post.dto.response.QInfoResponse;
 import com.insta.instaapi.post.dto.response.QPostCommentResponse;
-import com.insta.instaapi.post.entity.Posts;
 import com.insta.instaapi.post.entity.Status;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.insta.instaapi.post.entity.QPosts.posts;
+import static com.insta.instaapi.post.entity.QPostsComments.postsComments;
 import static com.insta.instaapi.user.entity.QUsers.users;
 import static com.insta.instaapi.user.entity.QUsersFollow.usersFollow;
-import static com.insta.instaapi.post.entity.QPostsComments.postsComments;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class DslPostsRepository {
 
     public List<PostCommentResponse> postComments(String postId) {
         return jpaQueryFactory
-                .select(new QPostCommentResponse(users.id, users.email, users.name, users.profileImage, postsComments.postsCommentsContent))
+                .select(new QPostCommentResponse(postsComments.id, users.id, users.email, users.name, users.profileImage, postsComments.postsCommentsContent))
                 .from(postsComments)
                 .innerJoin(posts).on(postsComments.posts.id.eq(posts.id))
                 .innerJoin(users).on(postsComments.users.id.eq(users.id))

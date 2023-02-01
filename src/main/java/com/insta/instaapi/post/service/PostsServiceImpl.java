@@ -6,18 +6,15 @@ import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
 import com.insta.instaapi.post.dto.response.PostCommentResponse;
 import com.insta.instaapi.post.dto.response.PostResponse;
-import com.insta.instaapi.post.entity.Posts;
-import com.insta.instaapi.post.entity.PostsComments;
-import com.insta.instaapi.post.entity.PostsPhotos;
-import com.insta.instaapi.post.entity.Status;
-import com.insta.instaapi.post.entity.repository.PostsCommentsRepository;
-import com.insta.instaapi.post.entity.repository.PostsPhotosRepository;
-import com.insta.instaapi.post.entity.repository.PostsRepository;
+import com.insta.instaapi.post.entity.*;
+import com.insta.instaapi.post.entity.repository.*;
 import com.insta.instaapi.post.entity.repository.queryDSL.DslPostsRepository;
+import com.insta.instaapi.post.exception.PostCommentException;
 import com.insta.instaapi.post.exception.PostException;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +32,8 @@ public class PostsServiceImpl implements PostsService {
     private final PostsRepository postsRepository;
     private final PostsPhotosRepository postsPhotosRepository;
     private final PostsCommentsRepository postsCommentsRepository;
+    private final PostsLikeRepository postsLikeRepository;
+    private final PostsCommentsLikeRepository postsCommentsLikeRepository;
     private final DslPostsRepository dslPostsRepository;
 
     @Override
@@ -48,8 +47,10 @@ public class PostsServiceImpl implements PostsService {
     @Override
     public PostResponse userPost(HttpServletRequest httpServletRequest, String postId) {
         Posts post = findById(postId);
+        Long countComment = postsCommentsRepository.countByPostsAndPostsCommentsStatus(post, Status.NOT_DELETED);
+        Long countLike = postsLikeRepository.countByPosts(post);
 
-        return PostResponse.toEntity(post, photos(post));
+        return PostResponse.of(post, photos(post), countComment, countLike);
     }
 
     @Transactional(readOnly = true)
@@ -78,7 +79,12 @@ public class PostsServiceImpl implements PostsService {
     @Override
     public String deletePost(HttpServletRequest httpServletRequest, String postId) {
         Posts post = findById(postId);
+        List<PostsComments> comments = postsCommentsRepository.findByPosts(post);
+
         post.delete(Status.DELETED);
+        for (PostsComments comment: comments) {
+            comment.delete(Status.DELETED);
+        }
 
         return "삭제되었습니다.";
     }
@@ -95,6 +101,31 @@ public class PostsServiceImpl implements PostsService {
         return dslPostsRepository.postComments(postId);
     }
 
+    @Override
+    public String postLike(HttpServletRequest httpServletRequest, String postId) {
+        Posts post = findById(postId);
+
+        if (isClickedPostLike(current(httpServletRequest), post)) {
+            return cancelPostLike(current(httpServletRequest), post);
+        }
+
+        postsLikeRepository.save(new PostsLike(current(httpServletRequest), post));
+        return "좋아요";
+    }
+
+    @Override
+    public String commentLike(HttpServletRequest httpServletRequest, String postId, String commentId) {
+        PostsComments comment = postsCommentsRepository.findById(commentId)
+                .orElseThrow(() -> new PostCommentException("댓글을 찾을 수 없습니다."));
+
+        if (isClickedCommentLike(current(httpServletRequest), comment)) {
+            return cancelCommentLike(current(httpServletRequest), comment);
+        }
+
+        postsCommentsLikeRepository.save(new PostsCommentsLike(current(httpServletRequest), comment));
+        return "좋아요";
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email) {
@@ -102,7 +133,9 @@ public class PostsServiceImpl implements PostsService {
         List<PostResponse> result = new ArrayList<>();
 
         for (Posts post: posts) {
-            result.add(PostResponse.of(post, photos(post)));
+            Long countComment = postsCommentsRepository.countByPostsAndPostsCommentsStatus(post, Status.NOT_DELETED);
+            Long countLike = postsLikeRepository.countByPosts(post);
+            result.add(PostResponse.of(post, photos(post), countComment, countLike));
         }
         return result;
     }
@@ -133,5 +166,23 @@ public class PostsServiceImpl implements PostsService {
     private Posts findById(String postId) {
         return postsRepository.findByIdAndPostsStatus(postId, Status.NOT_DELETED)
                 .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
+    }
+
+    private boolean isClickedPostLike(Users user, Posts post) {
+        return postsLikeRepository.existsByUsersAndPosts(user, post);
+    }
+
+    private String cancelPostLike(Users user, Posts post) {
+        postsLikeRepository.deleteByUsersAndPosts(user, post);
+        return "좋아요 취소";
+    }
+
+    private boolean isClickedCommentLike(Users user, PostsComments comment) {
+        return postsCommentsLikeRepository.existsByUsersAndPostsComments(user, comment);
+    }
+
+    private String cancelCommentLike(Users user, PostsComments comment) {
+        postsCommentsLikeRepository.deleteByUsersAndPostsComments(user, comment);
+        return "좋아요 취소";
     }
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostCommentResponse {
 
+    private String commentId;
     private String userId;
     private String email;
     private String name;
@@ -17,7 +18,8 @@ public class PostCommentResponse {
 
     @QueryProjection
     @Builder
-    public PostCommentResponse(String userId, String email, String name, String profileImage, String postsCommentsContent) {
+    public PostCommentResponse(String commentId, String userId, String email, String name, String profileImage, String postsCommentsContent) {
+        this.commentId = commentId;
         this.userId = userId;
         this.email = email;
         this.name = name;
