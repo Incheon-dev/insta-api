@@ -1,8 +1,10 @@
 package com.insta.instaapi.post.service;
 
+import com.insta.instaapi.post.dto.request.PostCommentRequest;
 import com.insta.instaapi.post.dto.request.PostRequest;
 import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
+import com.insta.instaapi.post.dto.response.PostCommentResponse;
 import com.insta.instaapi.post.dto.response.PostResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,5 +21,9 @@ public interface PostsService {
 
     String updatePost(HttpServletRequest httpServletRequest, UpdatePostRequest request);
 
-    String deletePost(HttpServletRequest httpServletRequest, String id);
+    String deletePost(HttpServletRequest httpServletRequest, String postId);
+
+    String postComment(HttpServletRequest httpServletRequest, String postId, PostCommentRequest request);
+
+    List<PostCommentResponse> userComment(HttpServletRequest httpServletRequest, String postId);
 }

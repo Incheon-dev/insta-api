@@ -1,12 +1,16 @@
 package com.insta.instaapi.post.service;
 
+import com.insta.instaapi.post.dto.request.PostCommentRequest;
 import com.insta.instaapi.post.dto.request.PostRequest;
 import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
+import com.insta.instaapi.post.dto.response.PostCommentResponse;
 import com.insta.instaapi.post.dto.response.PostResponse;
 import com.insta.instaapi.post.entity.Posts;
+import com.insta.instaapi.post.entity.PostsComments;
 import com.insta.instaapi.post.entity.PostsPhotos;
-import com.insta.instaapi.post.entity.PostsStatus;
+import com.insta.instaapi.post.entity.Status;
+import com.insta.instaapi.post.entity.repository.PostsCommentsRepository;
 import com.insta.instaapi.post.entity.repository.PostsPhotosRepository;
 import com.insta.instaapi.post.entity.repository.PostsRepository;
 import com.insta.instaapi.post.entity.repository.queryDSL.DslPostsRepository;
@@ -30,11 +34,12 @@ public class PostsServiceImpl implements PostsService {
     private final UserServiceImpl userService;
     private final PostsRepository postsRepository;
     private final PostsPhotosRepository postsPhotosRepository;
+    private final PostsCommentsRepository postsCommentsRepository;
     private final DslPostsRepository dslPostsRepository;
 
     @Override
     public String post(HttpServletRequest httpServletRequest, PostRequest request) {
-        Posts post = postsRepository.save(new Posts().create(request, current(httpServletRequest), PostsStatus.NOT_DELETED));
+        Posts post = postsRepository.save(new Posts().create(request, current(httpServletRequest), Status.NOT_DELETED));
         savePhotos(post, request.getPhotos());
         return post.getId();
     }
@@ -42,8 +47,7 @@ public class PostsServiceImpl implements PostsService {
     @Transactional(readOnly = true)
     @Override
     public PostResponse userPost(HttpServletRequest httpServletRequest, String postId) {
-        Posts post = postsRepository.findByIdAndPostsStatus(postId, PostsStatus.NOT_DELETED)
-                .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
+        Posts post = findById(postId);
 
         return PostResponse.toEntity(post, photos(post));
     }
@@ -64,8 +68,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public String updatePost(HttpServletRequest httpServletRequest, UpdatePostRequest request) {
-        Posts post = postsRepository.findByIdAndPostsStatus(request.getPostId(), PostsStatus.NOT_DELETED)
-                .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
+        Posts post = findById(request.getPostId());
         post.update(request);
         updatePhotos(post, request.getPhotos());
 
@@ -73,18 +76,29 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public String deletePost(HttpServletRequest httpServletRequest, String id) {
-        Posts post = postsRepository.findById(id)
-                .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
-        post.delete(PostsStatus.DELETED);
+    public String deletePost(HttpServletRequest httpServletRequest, String postId) {
+        Posts post = findById(postId);
+        post.delete(Status.DELETED);
 
         return "삭제되었습니다.";
+    }
+
+    @Override
+    public String postComment(HttpServletRequest httpServletRequest, String postId, PostCommentRequest request) {
+        Posts post = findById(postId);
+        return postsCommentsRepository.save(new PostsComments(current(httpServletRequest), post, request.getPostsCommentContent(), Status.NOT_DELETED)).getId();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PostCommentResponse> userComment(HttpServletRequest httpServletRequest, String postId) {
+        return dslPostsRepository.postComments(postId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email) {
-        List<Posts> posts = postsRepository.findByUsersAndPostsStatus(findByEmail(email), PostsStatus.NOT_DELETED);
+        List<Posts> posts = postsRepository.findByUsersAndPostsStatus(findByEmail(email), Status.NOT_DELETED);
         List<PostResponse> result = new ArrayList<>();
 
         for (Posts post: posts) {
@@ -114,5 +128,10 @@ public class PostsServiceImpl implements PostsService {
 
     private Users findByEmail(String email) {
         return userService.findByEmail(email);
+    }
+
+    private Posts findById(String postId) {
+        return postsRepository.findByIdAndPostsStatus(postId, Status.NOT_DELETED)
+                .orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다."));
     }
 }

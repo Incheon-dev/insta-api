@@ -1,8 +1,10 @@
 package com.insta.instaapi.post.controller;
 
+import com.insta.instaapi.post.dto.request.PostCommentRequest;
 import com.insta.instaapi.post.dto.request.PostRequest;
 import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
+import com.insta.instaapi.post.dto.response.PostCommentResponse;
 import com.insta.instaapi.post.dto.response.PostResponse;
 import com.insta.instaapi.post.service.PostsService;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +58,12 @@ public class PostsController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/user/post/{id}")
-    public ResponseEntity<PostResponse> userPost(HttpServletRequest httpServletRequest, @PathVariable String id) {
+    @GetMapping("/api/user/post/{postId}")
+    public ResponseEntity<PostResponse> userPost(HttpServletRequest httpServletRequest, @PathVariable String postId) {
         PostResponse response = null;
 
         try {
-            response = postsService.userPost(httpServletRequest, id);
+            response = postsService.userPost(httpServletRequest, postId);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -81,16 +83,42 @@ public class PostsController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/api/user/post/{id}")
-    public ResponseEntity<?> deletePost(HttpServletRequest httpServletRequest, @PathVariable String id) {
+    @PatchMapping("/api/user/post/{postId}")
+    public ResponseEntity<?> deletePost(HttpServletRequest httpServletRequest, @PathVariable String postId) {
         String response = "";
 
         try {
-            response = postsService.deletePost(httpServletRequest, id);
+            response = postsService.deletePost(httpServletRequest, postId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
          return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/api/user/post/{postId}/comment")
+    public ResponseEntity<?> postComment(HttpServletRequest httpServletRequest, @PathVariable String postId, @RequestBody PostCommentRequest request) {
+        String response = "";
+
+        try {
+            response = postsService.postComment(httpServletRequest, postId, request);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/user/post/{postId}/comment")
+    public ResponseEntity<?> userComment(HttpServletRequest httpServletRequest, @PathVariable String postId) {
+        List<PostCommentResponse> response = null;
+
+        try {
+            response = postsService.userComment(httpServletRequest, postId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
     }
 }

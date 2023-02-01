@@ -1,8 +1,11 @@
 package com.insta.instaapi.post.entity.repository.queryDSL;
 
 import com.insta.instaapi.post.dto.response.InfoResponse;
+import com.insta.instaapi.post.dto.response.PostCommentResponse;
 import com.insta.instaapi.post.dto.response.QInfoResponse;
-import com.insta.instaapi.post.entity.PostsStatus;
+import com.insta.instaapi.post.dto.response.QPostCommentResponse;
+import com.insta.instaapi.post.entity.Posts;
+import com.insta.instaapi.post.entity.Status;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,6 +15,7 @@ import java.util.List;
 import static com.insta.instaapi.post.entity.QPosts.posts;
 import static com.insta.instaapi.user.entity.QUsers.users;
 import static com.insta.instaapi.user.entity.QUsersFollow.usersFollow;
+import static com.insta.instaapi.post.entity.QPostsComments.postsComments;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,7 +31,20 @@ public class DslPostsRepository {
                 .innerJoin(usersFollow).on(posts.users.id.eq(usersFollow.followed.id))
                 .innerJoin(users).on(posts.users.id.eq(users.id))
                 .where(usersFollow.following.id.eq(userId)
-                        .and(posts.postsStatus.eq(PostsStatus.NOT_DELETED)))
+                        .and(posts.postsStatus.eq(Status.NOT_DELETED)))
+                .fetchJoin()
+                .fetch();
+    }
+
+    public List<PostCommentResponse> postComments(String postId) {
+        return jpaQueryFactory
+                .select(new QPostCommentResponse(users.id, users.email, users.name, users.profileImage, postsComments.postsCommentsContent))
+                .from(postsComments)
+                .innerJoin(posts).on(postsComments.posts.id.eq(posts.id))
+                .innerJoin(users).on(postsComments.users.id.eq(users.id))
+                .where(posts.postsStatus.eq(Status.NOT_DELETED)
+                        .and(postsComments.postsCommentsStatus.eq(Status.NOT_DELETED))
+                        .and(posts.id.eq(postId)))
                 .fetchJoin()
                 .fetch();
     }
