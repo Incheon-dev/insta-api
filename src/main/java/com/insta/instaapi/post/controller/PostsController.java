@@ -2,6 +2,7 @@ package com.insta.instaapi.post.controller;
 
 import com.insta.instaapi.post.dto.request.PostCommentRequest;
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.dto.request.UpdateCommentRequest;
 import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
 import com.insta.instaapi.post.dto.response.PostCommentResponse;
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,6 +119,32 @@ public class PostsController {
 
         try {
             response = postsService.userComment(httpServletRequest, postId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/api/user/post/{postId}/comment")
+    public ResponseEntity<?> updateComment(HttpServletRequest httpServletRequest, @PathVariable String postId, @RequestBody UpdateCommentRequest request) {
+        String response = "";
+
+        try {
+            response = postsService.updateComment(httpServletRequest, postId, request);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/api/user/post/{postId}/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(HttpServletRequest httpServletRequest, @PathVariable String postId, @PathVariable String commentId) {
+        String response = "";
+
+        try {
+            response = postsService.deleteComment(httpServletRequest, postId, commentId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());

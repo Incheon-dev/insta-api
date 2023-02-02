@@ -2,6 +2,7 @@ package com.insta.instaapi.post.service;
 
 import com.insta.instaapi.post.dto.request.PostCommentRequest;
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.dto.request.UpdateCommentRequest;
 import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
 import com.insta.instaapi.post.dto.response.PostCommentResponse;
@@ -124,6 +125,26 @@ public class PostsServiceImpl implements PostsService {
 
         postsCommentsLikeRepository.save(new PostsCommentsLike(current(httpServletRequest), comment));
         return "좋아요";
+    }
+
+    @Override
+    public String updateComment(HttpServletRequest httpServletRequest, String postId, UpdateCommentRequest request) {
+        PostsComments comment = postsCommentsRepository.findById(request.getCommentId())
+                .orElseThrow(() -> new PostCommentException("댓글을 찾을 수 없습니다."));
+
+        comment.update(request.getPostsCommentsContent());
+
+        return "수정되었습니다.";
+    }
+
+    @Override
+    public String deleteComment(HttpServletRequest httpServletRequest, String postId, String commentId) {
+        PostsComments comment = postsCommentsRepository.findById(commentId)
+                .orElseThrow(() -> new PostCommentException("댓글을 찾을 수 없습니다."));
+
+        comment.delete(Status.DELETED);
+
+        return "삭제되었습니다.";
     }
 
     @Transactional(readOnly = true)

@@ -2,6 +2,7 @@ package com.insta.instaapi.post.service;
 
 import com.insta.instaapi.post.dto.request.PostCommentRequest;
 import com.insta.instaapi.post.dto.request.PostRequest;
+import com.insta.instaapi.post.dto.request.UpdateCommentRequest;
 import com.insta.instaapi.post.dto.request.UpdatePostRequest;
 import com.insta.instaapi.post.dto.response.InfoResponse;
 import com.insta.instaapi.post.dto.response.PostCommentResponse;
@@ -31,4 +32,8 @@ public interface PostsService {
     String postLike(HttpServletRequest httpServletRequest, String postId);
 
     String commentLike(HttpServletRequest httpServletRequest, String postId, String commentId);
+
+    String updateComment(HttpServletRequest httpServletRequest, String postId, UpdateCommentRequest request);
+
+    String deleteComment(HttpServletRequest httpServletRequest, String postId, String commentId);
 }

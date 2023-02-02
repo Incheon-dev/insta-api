@@ -38,4 +38,8 @@ public class PostsComments extends BaseEntity {
     public void delete(Status status) {
         this.postsCommentsStatus = status;
     }
+
+    public void update(String postsCommentsContent) {
+        this.postsCommentsContent = postsCommentsContent;
+    }
 }
