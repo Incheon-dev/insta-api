@@ -56,8 +56,8 @@ public class PostsServiceImpl implements PostsService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<InfoResponse> allPosts(HttpServletRequest httpServletRequest) {
-        List<InfoResponse> info = dslPostsRepository.followingPosts(current(httpServletRequest).getId());
+    public List<InfoResponse> allPosts(HttpServletRequest httpServletRequest, Pageable pageable) {
+        List<InfoResponse> info = dslPostsRepository.followingPosts(current(httpServletRequest).getId(), pageable);
         List<InfoResponse> result = new ArrayList<>();
 
         for (InfoResponse info1: info) {
@@ -98,8 +98,8 @@ public class PostsServiceImpl implements PostsService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<PostCommentResponse> userComment(HttpServletRequest httpServletRequest, String postId) {
-        return dslPostsRepository.postComments(postId);
+    public List<PostCommentResponse> userComment(HttpServletRequest httpServletRequest, String postId, Pageable pageable) {
+        return dslPostsRepository.postComments(postId, pageable);
     }
 
     @Override
@@ -149,8 +149,8 @@ public class PostsServiceImpl implements PostsService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email) {
-        List<Posts> posts = postsRepository.findByUsersAndPostsStatus(findByEmail(email), Status.NOT_DELETED);
+    public List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email, Pageable pageable) {
+        List<Posts> posts = postsRepository.findByUsersAndPostsStatus(findByEmail(email), Status.NOT_DELETED, pageable);
         List<PostResponse> result = new ArrayList<>();
 
         for (Posts post: posts) {

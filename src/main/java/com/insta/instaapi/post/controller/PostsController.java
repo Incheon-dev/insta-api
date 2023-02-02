@@ -39,11 +39,11 @@ public class PostsController {
     }
 
     @GetMapping("/api/user/posts")
-    public ResponseEntity<List<InfoResponse>> allPosts(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<InfoResponse>> allPosts(HttpServletRequest httpServletRequest, Pageable pageable) {
         List<InfoResponse> response = null;
 
         try {
-            response = postsService.allPosts(httpServletRequest);
+            response = postsService.allPosts(httpServletRequest, pageable);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -51,11 +51,11 @@ public class PostsController {
     }
 
     @GetMapping("/api/user/posts/{email}")
-    public ResponseEntity<List<PostResponse>> userPosts(HttpServletRequest httpServletRequest, @PathVariable String email) {
+    public ResponseEntity<List<PostResponse>> userPosts(HttpServletRequest httpServletRequest, @PathVariable String email, Pageable pageable) {
         List<PostResponse> response = null;
 
         try {
-            response = postsService.userPosts(httpServletRequest, email);
+            response = postsService.userPosts(httpServletRequest, email, pageable);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -114,11 +114,11 @@ public class PostsController {
     }
 
     @GetMapping("/api/user/post/{postId}/comment")
-    public ResponseEntity<?> userComment(HttpServletRequest httpServletRequest, @PathVariable String postId) {
+    public ResponseEntity<?> userComment(HttpServletRequest httpServletRequest, @PathVariable String postId, Pageable pageable) {
         List<PostCommentResponse> response = null;
 
         try {
-            response = postsService.userComment(httpServletRequest, postId);
+            response = postsService.userComment(httpServletRequest, postId, pageable);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());

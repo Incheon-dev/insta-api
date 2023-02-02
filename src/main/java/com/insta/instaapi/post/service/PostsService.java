@@ -15,11 +15,11 @@ import java.util.List;
 public interface PostsService {
     String post(HttpServletRequest httpServletRequest, PostRequest request);
 
-    List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email);
+    List<PostResponse> userPosts(HttpServletRequest httpServletRequest, String email, Pageable pageable);
 
     PostResponse userPost(HttpServletRequest httpServletRequest, String postId);
 
-    List<InfoResponse> allPosts(HttpServletRequest httpServletRequest);
+    List<InfoResponse> allPosts(HttpServletRequest httpServletRequest, Pageable pageable);
 
     String updatePost(HttpServletRequest httpServletRequest, UpdatePostRequest request);
 
@@ -27,7 +27,7 @@ public interface PostsService {
 
     String postComment(HttpServletRequest httpServletRequest, String postId, PostCommentRequest request);
 
-    List<PostCommentResponse> userComment(HttpServletRequest httpServletRequest, String postId);
+    List<PostCommentResponse> userComment(HttpServletRequest httpServletRequest, String postId, Pageable pageable);
 
     String postLike(HttpServletRequest httpServletRequest, String postId);
 

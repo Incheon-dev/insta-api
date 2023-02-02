@@ -23,7 +23,7 @@ public class DslPostsRepository {
     
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<InfoResponse> followingPosts(String userId) {
+    public List<InfoResponse> followingPosts(String userId, Pageable pageable) {
         return jpaQueryFactory
                 .select(new QInfoResponse(users.id, users.email, users.name, users.nickname, users.profileImage, posts.id,
                         posts.postsContent, posts.location, posts.isComment))
@@ -32,11 +32,13 @@ public class DslPostsRepository {
                 .innerJoin(users).on(posts.users.id.eq(users.id))
                 .where(usersFollow.following.id.eq(userId)
                         .and(posts.postsStatus.eq(Status.NOT_DELETED)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetchJoin()
                 .fetch();
     }
 
-    public List<PostCommentResponse> postComments(String postId) {
+    public List<PostCommentResponse> postComments(String postId, Pageable pageable) {
         return jpaQueryFactory
                 .select(new QPostCommentResponse(postsComments.id, users.id, users.email, users.name, users.profileImage, postsComments.postsCommentsContent))
                 .from(postsComments)
@@ -45,6 +47,8 @@ public class DslPostsRepository {
                 .where(posts.postsStatus.eq(Status.NOT_DELETED)
                         .and(postsComments.postsCommentsStatus.eq(Status.NOT_DELETED))
                         .and(posts.id.eq(postId)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetchJoin()
                 .fetch();
     }
