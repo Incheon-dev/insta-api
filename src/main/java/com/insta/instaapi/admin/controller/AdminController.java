@@ -16,7 +16,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @PostMapping("/api/account/admin/sign-up")
+    @PostMapping("/api/admin/sign-up")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest request) {
         String response = "";
 

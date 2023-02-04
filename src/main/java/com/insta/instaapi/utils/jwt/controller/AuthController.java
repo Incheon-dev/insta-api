@@ -24,4 +24,9 @@ public class AuthController {
     public ResponseEntity<?> reissue(@RequestBody RefreshTokenRequest request) {
         return authService.reissue(request);
     }
+
+    @PostMapping("/api/admin/login")
+    public ResponseEntity<?> adminLogin(@RequestBody SignInRequest request) {
+        return authService.adminLogin(request);
+    }
 }

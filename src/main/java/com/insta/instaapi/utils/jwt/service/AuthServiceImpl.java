@@ -23,13 +23,16 @@ public class AuthServiceImpl implements AuthService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisUtil redisUtil;
     private final long refreshTokenValidityInMilliseconds;
+    private final long adminRefreshTokenValidityInMilliseconds;
 
     public AuthServiceImpl(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, RedisUtil redisUtil,
-                           @Value("${jwt.refresh-token-in-seconds}") long refreshTokenValidityInMilliseconds) {
+                           @Value("${jwt.refresh-token-in-seconds}") long refreshTokenValidityInMilliseconds,
+                           @Value("${jwt.admin-refresh-token-in-seconds") long adminRefreshTokenValidityInMilliseconds) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.redisUtil = redisUtil;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
+        this.adminRefreshTokenValidityInMilliseconds = adminRefreshTokenValidityInMilliseconds;
     }
 
 
@@ -62,6 +65,24 @@ public class AuthServiceImpl implements AuthService{
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);
         String accessToken = tokenProvider.createToken(authentication);
         redisUtil.setData(request.getEmail(), refreshToken);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
+
+        return new ResponseEntity<>(new TokenResponse(accessToken), httpHeaders, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> adminLogin(SignInRequest request) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String accessToken = tokenProvider.createAdminToken(authentication);
+        String refreshToken = tokenProvider.createAdminRefreshToken(authentication);
+        redisUtil.setDataExpire(request.getEmail(), refreshToken, adminRefreshTokenValidityInMilliseconds);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);

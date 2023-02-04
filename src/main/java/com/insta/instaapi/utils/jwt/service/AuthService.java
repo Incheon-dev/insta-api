@@ -9,4 +9,6 @@ public interface AuthService {
     ResponseEntity<TokenResponse> login(SignInRequest request);
 
     ResponseEntity<?> reissue(RefreshTokenRequest request);
+
+    ResponseEntity<?> adminLogin(SignInRequest request);
 }

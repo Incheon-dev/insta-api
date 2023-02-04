@@ -27,15 +27,21 @@ public class TokenProvider implements InitializingBean {
     private final String secret;
     private final long tokenValidityInMilliseconds;
     private final long refreshTokenValidityInMilliseconds;
+    private final long adminTokenValidityInSeconds;
+    private final long adminRefreshTokenValidityInMilliseconds;
     private Key key;
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
-            @Value("${jwt.refresh-token-in-seconds}") long refreshTokenValidityInMilliseconds) {
+            @Value("${jwt.refresh-token-in-seconds}") long refreshTokenValidityInMilliseconds,
+            @Value("${jwt.admin-token-in-seconds") long adminTokenValidityInSeconds,
+            @Value("${jwt.admin-refresh-token-in-seconds") long adminRefreshTokenValidityInMilliseconds) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
+        this.adminTokenValidityInSeconds = adminTokenValidityInSeconds;
+        this.adminRefreshTokenValidityInMilliseconds = adminRefreshTokenValidityInMilliseconds;
     }
 
     @Override
@@ -67,6 +73,38 @@ public class TokenProvider implements InitializingBean {
 
         long now = new Date().getTime();
         Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createAdminToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = new Date().getTime();
+        Date validity = new Date(now + this.adminTokenValidityInSeconds);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public String createAdminRefreshToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = new Date().getTime();
+        Date validity = new Date(now + this.adminRefreshTokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
