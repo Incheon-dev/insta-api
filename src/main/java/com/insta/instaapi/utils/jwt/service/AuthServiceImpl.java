@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService{
 
     public AuthServiceImpl(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, RedisUtil redisUtil,
                            @Value("${jwt.refresh-token-in-seconds}") long refreshTokenValidityInMilliseconds,
-                           @Value("${jwt.admin-refresh-token-in-seconds") long adminRefreshTokenValidityInMilliseconds) {
+                           @Value("${jwt.admin-refresh-token-in-seconds}") long adminRefreshTokenValidityInMilliseconds) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.redisUtil = redisUtil;
