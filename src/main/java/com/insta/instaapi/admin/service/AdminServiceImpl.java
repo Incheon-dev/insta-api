@@ -1,5 +1,6 @@
 package com.insta.instaapi.admin.service;
 
+import com.insta.instaapi.admin.dto.AdminUserResponse;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.entity.Authority;
 import com.insta.instaapi.user.entity.UserStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,11 @@ public class AdminServiceImpl implements AdminService {
                 .build();
 
         return usersRepository.save(new Users().create(request, authority, passwordEncoder, UserStatus.ACTIVATED)).getName();
+    }
+
+    @Override
+    public List<AdminUserResponse> allUsers(HttpServletRequest httpServletRequest) {
+        return AdminUserResponse.of(userService.allUsers());
     }
 
     public Users current(HttpServletRequest httpServletRequest) {

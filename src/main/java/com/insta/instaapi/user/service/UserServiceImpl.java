@@ -179,4 +179,8 @@ public class UserServiceImpl implements UserService {
     private Long countFollow(Users user) {
         return usersFollowRepository.countByFollowing(user);
     }
+
+    public List<Users> allUsers() {
+        return usersRepository.findAll();
+    }
 }
