@@ -12,19 +12,19 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class SignUpRequest {
 
-    @NotBlank
+    @NotBlank(message = "공백 또는 빈 값이 존재합니다.")
     private String phoneNumber;
-    @Email
-    @NotBlank
+    @Email(message = "이메일 형식이어야 합니다.")
+    @NotBlank(message = "공백 또는 빈 값이 존재합니다.")
     private String email;
-    @NotBlank
+    @NotBlank(message = "공백 또는 빈 값이 존재합니다.")
     private String name;
     private String nickname;
     private String profileImage;
-    @NotBlank
+    @NotBlank(message = "공백 또는 빈 값이 존재합니다.")
     private String password;
     private String introduction;
-    @NotBlank
+    @NotBlank(message = "공백 또는 빈 값이 존재합니다.")
     private String sex;
 
     @Builder
