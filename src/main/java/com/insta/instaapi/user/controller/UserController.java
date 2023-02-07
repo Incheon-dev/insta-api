@@ -21,122 +21,128 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/account/sign-up")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequest request) {
         String response = "";
 
         try {
             response = userService.signup(request);
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = e.getMessage();
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/account")
-    public ResponseEntity<Boolean> validateEmail(@RequestParam String email) {
+    public ResponseEntity<?> validateEmail(@RequestParam String email) {
         Boolean response;
 
         try {
             response = userService.validateEmail(email);
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = null;
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/api/account")
-    public ResponseEntity<String> resetPassword(@Valid @RequestBody UpdatePasswordRequest request) {
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody UpdatePasswordRequest request) {
         String response = "";
 
         try {
             response = userService.resetPassword(request);
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = e.getMessage();
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/user/search")
-    public ResponseEntity<UserResponse> search(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<?> search(HttpServletRequest httpServletRequest, @RequestParam String email) {
         UserResponse response = null;
 
         try {
             response = userService.search(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/api/user/block")
-    public ResponseEntity<String> block(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<?> block(HttpServletRequest httpServletRequest, @RequestParam String email) {
         String response = "";
 
         try {
             response = userService.block(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = e.getMessage();
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/user/block/list")
-    public ResponseEntity<List<UserResponse>> blockList(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> blockList(HttpServletRequest httpServletRequest) {
         List<UserResponse> response = null;
 
         try {
             response = userService.blockList(httpServletRequest);
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/api/user/unblock")
-    public ResponseEntity<Void> unblock(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<?> unblock(HttpServletRequest httpServletRequest, @RequestParam String email) {
         try {
             userService.unblock(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/api/user/follow")
-    public ResponseEntity<String> follow(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<?> follow(HttpServletRequest httpServletRequest, @RequestParam String email) {
         String response = "";
 
         try {
             response = userService.follow(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = e.getMessage();
+            return ResponseEntity.internalServerError().body(e.getMessage());
+
         }
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/api/user/unfollow")
-    public ResponseEntity<Void> unfollow(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<?> unfollow(HttpServletRequest httpServletRequest, @RequestParam String email) {
         try {
             userService.unfollow(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/api/user")
-    public ResponseEntity<UserResponse> userInfo(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    public ResponseEntity<?> userInfo(HttpServletRequest httpServletRequest, @RequestParam String email) {
         UserResponse response = null;
 
         try {
             response = userService.userInfo(httpServletRequest, email);
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
