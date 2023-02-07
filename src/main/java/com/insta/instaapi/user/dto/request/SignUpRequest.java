@@ -5,23 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
 public class SignUpRequest {
 
-    @NotNull
+    @NotBlank
     private String phoneNumber;
     @Email
+    @NotBlank
     private String email;
-    @NotNull
+    @NotBlank
     private String name;
     private String nickname;
     private String profileImage;
-    @NotNull
+    @NotBlank
     private String password;
     private String introduction;
+    @NotBlank
     private String sex;
 
     @Builder

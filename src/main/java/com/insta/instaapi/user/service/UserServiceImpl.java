@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String signup(SignUpRequest request) {
 
-        if (usersRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+        if (existsByPhoneNumber(request.getPhoneNumber())) {
             throw new UserDuplicatedException("해당 번호로 가입된 유저가 존재합니다.");
         }
 
@@ -182,5 +182,9 @@ public class UserServiceImpl implements UserService {
 
     public List<Users> allUsers() {
         return usersRepository.findAll();
+    }
+
+    private boolean existsByPhoneNumber(String phoneNumber) {
+        return usersRepository.existsByPhoneNumber(phoneNumber);
     }
 }
