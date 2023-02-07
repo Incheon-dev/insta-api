@@ -1,6 +1,5 @@
-package com.insta.instaapi.admin.dto;
+package com.insta.instaapi.admin.dto.response;
 
-import com.insta.instaapi.post.entity.Status;
 import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
 import lombok.Builder;

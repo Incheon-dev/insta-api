@@ -1,6 +1,9 @@
 package com.insta.instaapi.admin.service;
 
-import com.insta.instaapi.admin.dto.AdminUserResponse;
+import com.insta.instaapi.admin.dto.request.AdminSearchRequest;
+import com.insta.instaapi.admin.dto.response.AdminUserResponse;
+import com.insta.instaapi.admin.dto.response.AdminUserSearchResponse;
+import com.insta.instaapi.admin.entity.repository.queryDSL.DslAdminUserRepository;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.entity.Authority;
 import com.insta.instaapi.user.entity.UserStatus;
@@ -24,6 +27,7 @@ public class AdminServiceImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
     private final UserServiceImpl userService;
     private final UsersRepository usersRepository;
+    private final DslAdminUserRepository dslAdminUserRepository;
 
     @Override
     public String signup(SignUpRequest request) {
@@ -42,6 +46,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<AdminUserResponse> allUsers(HttpServletRequest httpServletRequest) {
         return AdminUserResponse.of(userService.allUsers());
+    }
+
+    @Override
+    public AdminUserSearchResponse search(HttpServletRequest httpServletRequest, AdminSearchRequest request) {
+        System.out.println(dslAdminUserRepository.searchUser(request));
+        return dslAdminUserRepository.searchUser(request);
     }
 
     public Users current(HttpServletRequest httpServletRequest) {

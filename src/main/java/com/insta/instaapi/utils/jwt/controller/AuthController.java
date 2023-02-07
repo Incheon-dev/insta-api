@@ -25,7 +25,7 @@ public class AuthController {
         return authService.reissue(request);
     }
 
-    @PostMapping("/api/admin/login")
+    @PostMapping("/api/account/admin/login")
     public ResponseEntity<?> adminLogin(@RequestBody SignInRequest request) {
         return authService.adminLogin(request);
     }
