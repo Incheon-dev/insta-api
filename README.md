@@ -35,6 +35,14 @@
 |/api/user/posts|전체 글 조회|GET|
 |/api/user/posts/{email}|특정 유저 전체 글 조회|GET|
 |/api/user/post/{id}|특정 글 조회|GET|
+|/api/user/post|글 수정|PATCH|
+|/api/user/post/{postId}|글 삭제|PATCH|
+|/api/user/post/{postId}/comment|댓글 달기|POST|
+|/api/user/post/{postId}/comment|댓글 조회|GET|
+|/api/user/post/{postId}/comment|댓글 수정|PATCH|
+|/api/user/post/{postId}/comment/{commmentId}|댓글 삭제|PATCH|
+|/api/user/post/{postId}|게시글 좋아요|POST|
+|/api/user/post/{postId}/comment/{commentId}|댓글 좋아요|POST|
 
 
 </br>
