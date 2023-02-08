@@ -1,8 +1,6 @@
 # insta-api
 > Java Spring Boot를 활용하여 사람들이 많이 사용하고 있는 인스타그램을 클론하여 제작합니다. 개발자의 관점으로써는 객체지향적으로, 유저의 관점으로써는 UX가 좋게 남도록 설계하고 구성합니다. 프로젝트는 마무리되지 않고 지속적으로 업데이트될 예정입니다.
 
-<img src = "https://incheon-dev.s3.ap-northeast-2.amazonaws.com/static/logo.PNG"/>
-
 ## 목차
 1. [version](#1-version)</br>
 2. [uri](#2-uri)</br>
