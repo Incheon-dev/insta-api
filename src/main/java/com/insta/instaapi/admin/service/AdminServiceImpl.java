@@ -50,7 +50,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminUserSearchResponse search(HttpServletRequest httpServletRequest, AdminSearchRequest request) {
-        System.out.println(dslAdminUserRepository.searchUser(request));
         return dslAdminUserRepository.searchUser(request);
     }
 

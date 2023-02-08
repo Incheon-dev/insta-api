@@ -1,4 +1,4 @@
-package com.insta.instaapi.admin.dto;
+package com.insta.instaapi.admin.entity;
 
 import com.insta.instaapi.post.entity.Posts;
 import com.insta.instaapi.post.entity.PostsComments;
