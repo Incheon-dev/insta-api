@@ -10,6 +10,7 @@ import com.insta.instaapi.user.entity.UserStatus;
 import com.insta.instaapi.user.entity.Users;
 import com.insta.instaapi.user.entity.repository.UsersRepository;
 import com.insta.instaapi.user.exception.UserDuplicatedException;
+import com.insta.instaapi.user.exception.UserNotFoundException;
 import com.insta.instaapi.user.service.UserServiceImpl;
 import com.insta.instaapi.utils.jwt.config.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +50,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminUserSearchResponse search(HttpServletRequest httpServletRequest, AdminSearchRequest request) {
+    public List<AdminUserSearchResponse> search(HttpServletRequest httpServletRequest, AdminSearchRequest request) {
         return dslAdminUserRepository.searchUser(request);
+    }
+
+    @Override
+    public AdminUserResponse userInfo(HttpServletRequest httpServletRequest, String userId) {
+        return AdminUserResponse.of(userService.findById(userId));
     }
 
     public Users current(HttpServletRequest httpServletRequest) {

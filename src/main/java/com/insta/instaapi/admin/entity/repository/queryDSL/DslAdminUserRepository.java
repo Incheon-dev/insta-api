@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static com.insta.instaapi.user.entity.QUsers.users;
@@ -19,14 +20,14 @@ public class DslAdminUserRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public AdminUserSearchResponse searchUser(AdminSearchRequest request) {
+    public List<AdminUserSearchResponse> searchUser(AdminSearchRequest request) {
         return jpaQueryFactory
                 .select(new QAdminUserSearchResponse(users.id, users.createdDate, users.email, users.nickname, users.phoneNumber, users.name, users.status))
                 .from(users)
                 .where(eqEmail(request.getEmail())
                         .or(eqPhoneNumber(request.getPhoneNumber()))
                         .or(eqSex(request.getSex())))
-                .fetchOne();
+                .fetch();
     }
 
     private BooleanExpression eqEmail(String email) {

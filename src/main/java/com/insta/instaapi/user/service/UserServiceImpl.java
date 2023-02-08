@@ -187,4 +187,9 @@ public class UserServiceImpl implements UserService {
     private boolean existsByPhoneNumber(String phoneNumber) {
         return usersRepository.existsByPhoneNumber(phoneNumber);
     }
+
+    public Users findById(String userId) {
+        return usersRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
+    }
 }

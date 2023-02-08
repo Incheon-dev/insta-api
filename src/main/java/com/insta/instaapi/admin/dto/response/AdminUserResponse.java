@@ -50,4 +50,16 @@ public class AdminUserResponse {
 
         return result;
     }
+
+    public static AdminUserResponse of(Users user) {
+        return AdminUserResponse.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .name(user.getName())
+                .introduction(user.getIntroduction())
+                .sex(user.getSex())
+                .status(user.getStatus())
+                .build();
+    }
 }

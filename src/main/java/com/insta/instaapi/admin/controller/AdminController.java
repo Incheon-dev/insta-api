@@ -48,10 +48,23 @@ public class AdminController {
 
     @PostMapping("/api/admin/users/search")
     public ResponseEntity<?> search(HttpServletRequest httpServletRequest, @RequestBody AdminSearchRequest request) {
-        AdminUserSearchResponse response = null;
+        List<AdminUserSearchResponse> response = null;
 
         try {
             response = adminService.search(httpServletRequest, request);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/admin/users/{userId}")
+    public ResponseEntity<?> userInfo(HttpServletRequest httpServletRequest, @PathVariable String userId) {
+        AdminUserResponse response = null;
+
+        try {
+            response = adminService.userInfo(httpServletRequest, userId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());

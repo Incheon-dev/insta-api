@@ -11,18 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminSearchRequest {
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endDate;
     private String email;
     private String phoneNumber;
     private String sex;
 
     @Builder
-    public AdminSearchRequest(LocalDateTime startDate, LocalDateTime endDate, String email, String phoneNumber, String sex) {
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public AdminSearchRequest(String email, String phoneNumber, String sex) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.sex = sex;
