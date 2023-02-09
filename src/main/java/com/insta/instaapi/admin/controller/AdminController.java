@@ -71,4 +71,17 @@ public class AdminController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/api/admin/users/{userId}")
+    public ResponseEntity<?> block(HttpServletRequest httpServletRequest, @PathVariable String userId) {
+        String response = "";
+
+        try {
+            response = adminService.block(httpServletRequest, userId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
 }

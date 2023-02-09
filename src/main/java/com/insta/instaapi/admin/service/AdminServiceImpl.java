@@ -59,6 +59,13 @@ public class AdminServiceImpl implements AdminService {
         return AdminUserResponse.of(userService.findById(userId));
     }
 
+    @Override
+    public String block(HttpServletRequest httpServletRequest, String userId) {
+        Users user = userService.findById(userId);
+        user.block(UserStatus.INACTIVATED);
+        return user.getEmail() + "에 해당하는 유저를 차단하였습니다.";
+    }
+
     public Users current(HttpServletRequest httpServletRequest) {
         return userService.current(httpServletRequest);
     }

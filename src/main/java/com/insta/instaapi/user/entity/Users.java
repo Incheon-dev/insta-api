@@ -87,4 +87,8 @@ public class Users extends BaseEntity {
     public void profileImage(String imageUrl) {
         this.profileImage = imageUrl;
     }
+
+    public void block(UserStatus inActivated) {
+        this.status = inActivated;
+    }
 }

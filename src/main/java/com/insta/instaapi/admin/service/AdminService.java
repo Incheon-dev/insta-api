@@ -16,4 +16,6 @@ public interface AdminService {
     List<AdminUserSearchResponse> search(HttpServletRequest httpServletRequest, AdminSearchRequest request);
 
     AdminUserResponse userInfo(HttpServletRequest httpServletRequest, String userId);
+
+    String block(HttpServletRequest httpServletRequest, String userId);
 }
