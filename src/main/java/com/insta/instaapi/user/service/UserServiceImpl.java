@@ -3,6 +3,7 @@ package com.insta.instaapi.user.service;
 import com.insta.instaapi.post.entity.repository.PostsRepository;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
+import com.insta.instaapi.user.dto.response.CurrentUserResponse;
 import com.insta.instaapi.user.dto.response.UserResponse;
 import com.insta.instaapi.user.entity.*;
 import com.insta.instaapi.user.entity.repository.UsersBlockRepository;
@@ -61,6 +62,11 @@ public class UserServiceImpl implements UserService {
         user.reset(passwordEncoder.encode(request.getNewPassword()));
 
         return user.getId();
+    }
+
+    @Override
+    public CurrentUserResponse currentUser(HttpServletRequest httpServletRequest) {
+        return CurrentUserResponse.of(current(httpServletRequest));
     }
 
     @Override

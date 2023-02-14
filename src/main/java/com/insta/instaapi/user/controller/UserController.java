@@ -2,6 +2,7 @@ package com.insta.instaapi.user.controller;
 
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.user.dto.request.UpdatePasswordRequest;
+import com.insta.instaapi.user.dto.response.CurrentUserResponse;
 import com.insta.instaapi.user.dto.response.UserResponse;
 import com.insta.instaapi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,19 @@ public class UserController {
 
         try {
             response = userService.resetPassword(request);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/user")
+    public ResponseEntity<?> currentUser(HttpServletRequest httpServletRequest) {
+        CurrentUserResponse response = null;
+
+        try {
+            response = userService.currentUser(httpServletRequest);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -134,8 +148,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/user")
-    public ResponseEntity<?> userInfo(HttpServletRequest httpServletRequest, @RequestParam String email) {
+    @GetMapping("/api/user/{email}")
+    public ResponseEntity<?> userInfo(HttpServletRequest httpServletRequest, @PathVariable String email) {
         UserResponse response = null;
 
         try {
