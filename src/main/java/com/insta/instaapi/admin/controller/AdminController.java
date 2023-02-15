@@ -1,6 +1,7 @@
 package com.insta.instaapi.admin.controller;
 
 import com.insta.instaapi.admin.dto.request.AdminSearchRequest;
+import com.insta.instaapi.admin.dto.request.AdminUserRequest;
 import com.insta.instaapi.admin.dto.response.AdminUserResponse;
 import com.insta.instaapi.admin.dto.response.AdminUserSearchResponse;
 import com.insta.instaapi.admin.service.AdminService;
@@ -78,6 +79,19 @@ public class AdminController {
 
         try {
             response = adminService.block(httpServletRequest, userId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/api/admin/users/{userId}")
+    public ResponseEntity<?> modify(HttpServletRequest httpServletRequest, @PathVariable String userId, @RequestBody AdminUserRequest request) {
+        String response = null;
+
+        try {
+            response = adminService.modify(httpServletRequest, userId, request);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());

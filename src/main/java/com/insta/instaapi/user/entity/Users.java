@@ -1,5 +1,6 @@
 package com.insta.instaapi.user.entity;
 
+import com.insta.instaapi.admin.dto.request.AdminUserRequest;
 import com.insta.instaapi.post.entity.Posts;
 import com.insta.instaapi.user.dto.request.SignUpRequest;
 import com.insta.instaapi.utils.entity.BaseEntity;
@@ -90,5 +91,15 @@ public class Users extends BaseEntity {
 
     public void block(UserStatus inActivated) {
         this.status = inActivated;
+    }
+
+    public void modify(AdminUserRequest request, PasswordEncoder passwordEncoder) {
+         this.phoneNumber = request.getPhoneNumber();
+         this.email = request.getEmail();
+         this.name = request.getName();
+         this.nickname = request.getNickname();
+         this.profileImage = request.getProfileImage();
+         this.password = passwordEncoder.encode(request.getPassword());
+         this.introduction = request.getIntroduction();
     }
 }

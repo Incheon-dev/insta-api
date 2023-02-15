@@ -1,6 +1,7 @@
 package com.insta.instaapi.admin.service;
 
 import com.insta.instaapi.admin.dto.request.AdminSearchRequest;
+import com.insta.instaapi.admin.dto.request.AdminUserRequest;
 import com.insta.instaapi.admin.dto.response.AdminUserResponse;
 import com.insta.instaapi.admin.dto.response.AdminUserSearchResponse;
 import com.insta.instaapi.admin.entity.repository.queryDSL.DslAdminUserRepository;
@@ -24,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserServiceImpl userService;
     private final UsersRepository usersRepository;
@@ -66,7 +66,19 @@ public class AdminServiceImpl implements AdminService {
         return user.getEmail() + "에 해당하는 유저를 차단하였습니다.";
     }
 
+    @Override
+    public String modify(HttpServletRequest httpServletRequest, String userId, AdminUserRequest request) {
+        Users user = findById(userId);
+        user.modify(request, passwordEncoder);
+
+        return "수정되었습니다.";
+    }
+
     public Users current(HttpServletRequest httpServletRequest) {
         return userService.current(httpServletRequest);
+    }
+
+    public Users findById(String userId) {
+        return userService.findById(userId);
     }
 }
