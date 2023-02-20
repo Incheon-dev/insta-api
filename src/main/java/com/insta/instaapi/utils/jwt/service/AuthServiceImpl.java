@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService{
 
 
     @Override
-    public ResponseEntity<TokenResponse> login(SignInRequest request) {
+    public ResponseEntity<?> login(SignInRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 
