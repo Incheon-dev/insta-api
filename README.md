@@ -46,7 +46,7 @@
 </br>
 
 ## 3. erd
-<img src="https://incheon-dev.s3.ap-northeast-2.amazonaws.com/static/erd.PNG"/>
+<img src="https://incheon-dev.s3.ap-northeast-2.amazonaws.com/personal/erd.PNG"/>
 </br>
 
 ## 4. notion
