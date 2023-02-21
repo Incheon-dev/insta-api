@@ -54,5 +54,5 @@
 </br>
 
 ## 5. result
-[Result](https://fan-yuzu-49b.notion.site/fb1199c472f246f1bbc6a65b13e724c1)
+[Result](https://fan-yuzu-49b.notion.site/bbaee72ab2384fbaa44f61efa1376ef7)
 </br>
